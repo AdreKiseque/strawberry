@@ -1063,9 +1063,6 @@ jobs:
 
   build-windows-mingw:
     name: Build Windows MinGW
-    if: (github.event_name == 'push' && github.repository == 'strawberrymusicplayer/strawberry' && github.ref_name != 'l10n_master') ||
-        (github.event_name == 'pull_request' && github.head_ref != 'l10n_master') ||
-        (github.event_name == 'release')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -1226,31 +1223,11 @@ jobs:
         working-directory: build
         run: makensis strawberry.nsi
 
-      - name: Set Upload path
-        id: set-upload-path
-        if: github.repository == 'strawberrymusicplayer/strawberry' && (github.event_name == 'release' || (github.event_name == 'push' && github.event.pull_request.head.repo.fork == false && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/ci' || github.ref == 'refs/heads/windows')))
-        run: |
-          if [ "${{github.event_name}}" = "release" ]; then
-            echo "upload_path=${{secrets.DOWNLOADS_PATH}}/stable_releases/windows/mingw" >> $GITHUB_OUTPUT
-          else
-            echo "upload_path=${{secrets.DOWNLOADS_PATH}}/development_releases/windows/mingw" >> $GITHUB_OUTPUT
-          fi
-
-      - name: SSH Setup
-        if: steps.set-upload-path.outputs.upload_path != ''
-        uses: shimataro/ssh-key-action@v2
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
         with:
-          known_hosts: ${{secrets.SSH_KNOWN_HOSTS}}
-          key: ${{ secrets.SSH_KEY }}
-
-      - name: Create server path
-        if: steps.set-upload-path.outputs.upload_path != ''
-        run: ssh -p ${{secrets.SSH_PORT}} -o StrictHostKeyChecking=no ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}} mkdir -p ${{steps.set-upload-path.outputs.upload_path}}
-
-      - name: rsync
-        if: steps.set-upload-path.outputs.upload_path != ''
-        run: rsync -e "ssh -p ${{secrets.SSH_PORT}} -o StrictHostKeyChecking=no" -var build/StrawberrySetup*.exe ${{secrets.SSH_USER}}@${{secrets.SSH_HOST}}:${{steps.set-upload-path.outputs.upload_path}}/
-
+          name: StrawberrySetup-${{matrix.buildtype}}
+          path: build/StrawberrySetup*.exe
 
   build-windows-msvc:
     name: Build Windows MSVC
