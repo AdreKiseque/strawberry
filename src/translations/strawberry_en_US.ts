@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>ASXParser</name>
+    <message>
+        <source>ASX playlist is too large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to write ASX playlist</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>About</name>
     <message>
         <source>About</source>
@@ -361,10 +372,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use system theme icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Tabbar colors</source>
         <translation type="unfinished"></translation>
     </message>
@@ -513,11 +520,103 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Window text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alternate base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tooltip base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tooltip text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Placeholder text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Button text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bright text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Select background image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You need to restart Strawberry for this setting to take affect.</source>
+        <source>Colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Use the system default color set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use a custom color set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set a custom color set suitable for a dark theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset the custom color set to the system default colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You might need to restart Strawberry for this setting to fully apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You need to restart Strawberry for this setting to take affect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changing colors is only supported with some styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark colors</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -697,6 +796,22 @@
     </message>
     <message>
         <source>You need to restart Strawberry for this setting to take affect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map the volume slider to a decibel scale so that perceived loudness changes evenly. Each 1% step equals 0.5 dB, 100% is 0 dB and 0% is silence.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exponential volume scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device warm-up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay between opening the audio device and starting playback, to avoid the start of the track being cut off while the device (DAC) is still becoming ready.  Set to 0 to disable.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3018,76 +3133,6 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
 </context>
 <context>
-    <name>LastFMImport</name>
-    <message>
-        <source>Missing username, please login to last.fm first!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>LastFMImportDialog</name>
-    <message>
-        <source>Import data from last.fm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Choose data to import from last.fm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last played</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play counts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning: Play counts and last played from last.fm will completely replace the same data for the matched songs. Play counts will replace the data based on artist and song title for the same albums! Please backup your database before you start.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receiving initial data from last.fm...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receiving playcount for %1 songs and last played for %2 songs.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receiving last played for %1 songs.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Receiving playcounts for %1 songs.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Playcounts for %1 songs and last played for %2 songs received.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Last played for %1 songs received.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Playcounts for %1 songs received.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>LastFMScrobbler</name>
     <message>
         <source>%1 Scrobbler Authentication</source>
@@ -3352,10 +3397,6 @@ If there are no matches then it will use the largest image in the directory.</so
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&amp;Add file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3505,10 +3546,6 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
     <message>
         <source>Show sidebar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import data from last.fm...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3741,6 +3778,22 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
     <message>
         <source>Collection rescan notice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+H</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to last playlist tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to active playlist tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close current playlist tab</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7121,6 +7174,14 @@ Are you sure you want to continue?</source>
 <context>
     <name>TagFetcher</name>
     <message>
+        <source>Stage: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reason: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Identifying song</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7129,7 +7190,35 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Generated fingerprint is empty or invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fingerprinting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fingerprint length: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum required length: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Downloading metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No MusicBrainz metadata was found for this track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MusicBrainz metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Candidate metadata rows: 0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7304,10 +7393,6 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sorry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Strawberry was unable to find results for this file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7344,6 +7429,10 @@ Are you sure you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Original tags</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7357,6 +7446,10 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Album artist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7929,6 +8022,13 @@ Are you sure you want to continue?</source>
     </message>
     <message>
         <source>Save the .waveform files directly in the songs folders</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XSPFParser</name>
+    <message>
+        <source>Failed to write XSPF playlist</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

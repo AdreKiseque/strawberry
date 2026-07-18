@@ -59,6 +59,7 @@
 #include <QSettings>
 #include <QLoggingCategory>
 #include <QStyle>
+#include <QStyleHints>
 #include <QMessageBox>
 #ifdef HAVE_TRANSLATIONS
 #  include <QTranslator>
@@ -74,6 +75,7 @@
 #include "core/settings.h"
 
 #include "utilities/envutils.h"
+#include "utilities/styleutils.h"
 
 #include <kdsingleapplication.h>
 
@@ -234,19 +236,33 @@ int main(int argc, char *argv[]) {
   // Gnome on Ubuntu has menu icons disabled by default.  I think that's a bad idea, and makes some menus in Strawberry look confusing.
   QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
 
+  const QString default_style = QApplication::style() ? QApplication::style()->objectName() : QString();
   {
     Settings s;
     s.beginGroup(AppearanceSettings::kSettingsGroup);
-    QString style = s.value(AppearanceSettings::kStyle).toString();
-    if (style.isEmpty()) {
-      style = "default"_L1;
-      s.setValue(AppearanceSettings::kStyle, style);
-    }
+    const QString style_name = s.value(AppearanceSettings::kStyle).toString();
+    const bool dark_mode = s.value(AppearanceSettings::kDarkMode, false).toBool();
     s.endGroup();
-    if (style != "default"_L1) {
-      QApplication::setStyle(style);
+    if (!style_name.isEmpty() && style_name.compare("default"_L1, Qt::CaseInsensitive) != 0) {
+      if (!QApplication::setStyle(style_name)) {
+        qLog(Error) << "Could not set style" << style_name << "- falling back to default style" << default_style;
+        if (!QApplication::setStyle(default_style)) {
+          qLog(Error) << "Could not set default style" << default_style;
+        }
+      }
     }
-    if (QApplication::style()) qLog(Debug) << "Style:" << QApplication::style()->objectName();
+    if (dark_mode && QApplication::style()) {
+      const QString current_style = QApplication::style() ? QApplication::style()->objectName() : QString();
+      const bool dark_mode_supported = Utilities::StyleHasDarkModeSupport(current_style);
+      if (dark_mode_supported) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+#endif
+      }
+    }
+    if (QApplication::style()) {
+      qLog(Debug) << "Style:" << QApplication::style()->objectName();
+    }
   }
 
   // Set the permissions on the config file on Unix - it can contain passwords for streaming services, so it's important that other users can't read it.
@@ -312,7 +328,7 @@ int main(int argc, char *argv[]) {
     languages << QLocale::system().name();
   }
 
-  ScopedPtr<Translations> translations(new Translations);
+  ScopedPtr<Translations> translations = std::make_unique<Translations>();
 
   for (const QString &language : std::as_const(languages)) {
     if (translations->LoadTranslation(u"qt"_s, QLibraryInfo::path(QLibraryInfo::TranslationsPath), language)) {
@@ -378,7 +394,8 @@ int main(int argc, char *argv[]) {
 #ifdef HAVE_DISCORD_RPC
                &discord_rich_presence,
 #endif
-               options);
+               options,
+               default_style);
 
 #ifdef Q_OS_UNIX
   UnixSignalWatcher unix_signal_watcher;

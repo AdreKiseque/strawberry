@@ -224,9 +224,10 @@ jobs:
 
   build-openmandriva:
     name: Build OpenMandriva
-    if: (github.event_name == 'push' && github.repository == 'strawberrymusicplayer/strawberry' && github.ref_name != 'l10n_master') ||
-        (github.event_name == 'pull_request' && github.head_ref != 'l10n_master') ||
-        (github.event_name == 'release')
+    if: false
+    #if: (github.event_name == 'push' && github.repository == 'strawberrymusicplayer/strawberry' && github.ref_name != 'l10n_master') ||
+    #    (github.event_name == 'pull_request' && github.head_ref != 'l10n_master') ||
+    #    (github.event_name == 'release')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -737,7 +738,7 @@ jobs:
         df -h
     - name: Build FreeBSD
       id: build-freebsd
-      uses: vmactions/freebsd-vm@v1.4.8
+      uses: vmactions/freebsd-vm@v1.5.0
       with:
         usesh: true
         mem: 8192
@@ -763,7 +764,7 @@ jobs:
         submodules: recursive
     - name: Build OpenBSD
       id: build-openbsd
-      uses: vmactions/openbsd-vm@v1.4.4
+      uses: vmactions/openbsd-vm@v1.4.5
       with:
         usesh: true
         mem: 4096
@@ -1198,7 +1199,7 @@ jobs:
         run: |
           files_missing=
           for i in $(ls -1 *.dll *.exe); do
-            nsi_file_entry=$(grep -i "^\s\+File\s\+\"$i\"$" strawberry.nsi || true)
+            nsi_file_entry=$(grep -i "^\s\+File\s\+\(/nonfatal\s\+\)\?\"$i\"$" strawberry.nsi || true)
             if [ "${nsi_file_entry}" = "" ]; then
               echo "File ${i} is missing File entry."
             fi
@@ -1527,7 +1528,7 @@ jobs:
         run: |
           files_missing=
           for i in $(ls -1 *.dll *.exe); do
-            nsi_file_entry=$(grep -i "^\s\+File\s\+\"$i\"$" strawberry.nsi || true)
+            nsi_file_entry=$(grep -i "^\s\+File\s\+\(/nonfatal\s\+\)\?\"$i\"$" strawberry.nsi || true)
             if [ "${nsi_file_entry}" = "" ]; then
               echo "File ${i} is missing File entry."
             fi

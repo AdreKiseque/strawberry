@@ -60,6 +60,8 @@ class GstEnginePipeline : public QObject {
   explicit GstEnginePipeline(QObject *parent = nullptr);
   ~GstEnginePipeline() override;
 
+  bool event(QEvent *e) override;
+
   // Globally unique across all pipelines.
   int id() const { return id_.load(); }
 
@@ -68,6 +70,7 @@ class GstEnginePipeline : public QObject {
   void set_playbin3_enabled(const bool playbin3_enabled);
   void set_exclusive_mode(const bool exclusive_mode);
   void set_volume_enabled(const bool enabled);
+  void set_volume_exponential(const bool enabled);
   void set_stereo_balancer_enabled(const bool enabled);
   void set_equalizer_enabled(const bool enabled);
   void set_replaygain(const bool enabled, const int mode, const double preamp, const double fallbackgain, const bool compression);
@@ -75,6 +78,7 @@ class GstEnginePipeline : public QObject {
   void set_buffer_duration_nanosec(const quint64 duration_nanosec);
   void set_buffer_low_watermark(const double value);
   void set_buffer_high_watermark(const double value);
+  void set_device_warmup_duration_ms(const int duration_ms);
   void set_proxy_settings(const QString &address, const bool authentication, const QString &user, const QString &pass);
   void set_channels(const bool enabled, const int channels);
   void set_bs2b_enabled(const bool enabled);
@@ -139,9 +143,6 @@ class GstEnginePipeline : public QObject {
 
   bool exclusive_mode() const { return exclusive_mode_; }
 
-  QByteArray redirect_url() const { return redirect_url_; }
-  QMutex *mutex_redirect_url() { return &mutex_redirect_url_; }
-
   QString source_device() const { return source_device_; }
 
  Q_SIGNALS:
@@ -161,10 +162,15 @@ class GstEnginePipeline : public QObject {
   static QString GstStateText(const GstState state);
   GstElement *CreateElement(const QString &factory_name, const QString &name, GstElement *bin, QString &error) const;
   bool IsStateNull() const;
+  bool StateChangeInProgress();
   bool InitAudioBin(QString &error);
   void SetupVolume(GstElement *element);
   void ReapplyVolume();
+  double PercentToInternalVolume(const uint volume_percent) const;
+  uint InternalVolumeToPercent(const double volume_internal) const;
   void SetStateAsync(const GstState state);
+  void StartPlaybackAfterWarmup();
+  void EmitFinishedIfQuiescent();
   void SetNextUrl();
 
   // Static callbacks.  The GstEnginePipeline instance is passed in the last argument.
@@ -181,6 +187,7 @@ class GstEnginePipeline : public QObject {
   static gboolean BusWatchCallback(GstBus *bus, GstMessage *msg, gpointer self);
   static void TaskEnterCallback(GstTask *task, GThread *thread, gpointer self);
 
+  void HandleBusMessage(GstMessage *msg);
   void TagMessageReceived(GstMessage *msg);
   void ErrorMessageReceived(GstMessage *msg);
   void ElementMessageReceived(GstMessage *msg);
@@ -196,7 +203,7 @@ class GstEnginePipeline : public QObject {
   void UpdateStereoBalance();
   void UpdateEqualizer();
 
-  void Disconnect();
+  void DisconnectCallbacks();
   void ResumeFaderAsync();
 
   void ProcessPendingSeek(const GstState state);
@@ -228,6 +235,7 @@ class GstEnginePipeline : public QObject {
   QVariant device_;
   bool exclusive_mode_;
   bool volume_enabled_;
+  bool volume_exponential_;
   bool fading_enabled_;
   std::atomic<bool> strict_ssl_enabled_;
 
@@ -235,6 +243,13 @@ class GstEnginePipeline : public QObject {
   quint64 buffer_duration_nanosec_;
   double buffer_low_watermark_;
   double buffer_high_watermark_;
+
+  // Audio device (DAC) warm-up delay in milliseconds inserted between preroll (PAUSED) and playback (PLAYING); 0 disables it.
+  int device_warmup_duration_ms_;
+  // Set for a fresh non-paused start with a warm-up delay configured, so the first time the pipeline reaches PAUSED we wait before going to PLAYING.  One-shot per Play().
+  std::atomic<bool> device_warmup_pending_;
+  // Bumped by every SetState() call so a scheduled warm-up timer can detect that a newer transition (e.g. the user paused/stopped, or a newer start) superseded it and skip resuming playback.
+  std::atomic<quint64> device_warmup_generation_;
 
   // Proxy
   QString proxy_address_;
@@ -312,10 +327,6 @@ class GstEnginePipeline : public QObject {
   // Set temporarily when switching out the decode bin, so metadata doesn't get sent while the Player still thinks it's playing the last song
   std::atomic<bool> ignore_tags_;
 
-  // When the gstreamer source requests a redirect we store the URL here and callers can pick it up after the state change to PLAYING fails.
-  mutable QMutex mutex_redirect_url_;
-  QByteArray redirect_url_;
-
   // When we need to specify the device to use as source (for CD device)
   QString source_device_;
   QMutex mutex_source_device_;
@@ -385,17 +396,17 @@ class GstEnginePipeline : public QObject {
   std::atomic<bool> finish_requested_;
   std::atomic<bool> finished_;
 
-  // The state-progress counters (*_in_progress_) and their paired last_set_state_*_in_progress_ values must be updated together under mutex_state_progress_ to avoid observers seeing torn state.
-  mutable QMutex mutex_state_progress_;
-  std::atomic<int> set_state_in_progress_;
+  // Identifies the current bus-watch session. Bumped by DisconnectCallbacks() so that GstBusMessageEvents posted from the GLib thread before teardown (Windows/macOS) are dropped instead of handled after the watch is gone or replaced.
+  std::atomic<quint64> bus_message_generation_;
+
+  // Number of SetStateAsync() requests that have been queued but not yet turned into a running state change.
+  // Incremented (possibly from a GStreamer streaming thread) the moment a request is queued and decremented when its slot runs, so that a state change is never briefly invisible while handing off from the queue to a pending future.
   std::atomic<int> set_state_async_in_progress_;
 
-  std::atomic<GstState> last_set_state_in_progress_;
-  std::atomic<GstState> last_set_state_async_in_progress_;
-
-  // Track futures for this pipeline's state changes to allow waiting for them in destructor
+  // Running gst_element_set_state() calls for this pipeline.
+  // Doubles as the source of truth for "a synchronous state change is in flight" and lets the destructor wait for them before unreffing the pipeline.
   QList<QFuture<GstStateChangeReturn>> pending_state_changes_;
-  QMutex mutex_pending_state_changes_;
+  mutable QMutex mutex_pending_state_changes_;
 };
 
 using GstEnginePipelinePtr = QSharedPointer<GstEnginePipeline>;

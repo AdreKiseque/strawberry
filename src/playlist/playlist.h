@@ -83,6 +83,7 @@ class Playlist : public QAbstractListModel {
   friend class PlaylistUndoCommandRemoveItems;
   friend class PlaylistUndoCommandMoveItems;
   friend class PlaylistUndoCommandReOrderItems;
+  friend class PlaylistTest;
 
  public:
   explicit Playlist(const SharedPtr<TaskManager> task_manager,
@@ -268,8 +269,8 @@ class Playlist : public QAbstractListModel {
 #endif
 
   // QAbstractListModel
-  int rowCount(const QModelIndex& = QModelIndex()) const override { return items_.count(); }
-  int columnCount(const QModelIndex& = QModelIndex()) const override { return static_cast<int>(ColumnCount); }
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override { Q_UNUSED(parent) return static_cast<int>(items_.count()); }
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override { Q_UNUSED(parent) return static_cast<int>(ColumnCount); }
   QVariant data(const QModelIndex &idx, const int role = Qt::DisplayRole) const override;
   bool setData(const QModelIndex &idx, const QVariant &value, const int role) override;
   QVariant headerData(const int section, const Qt::Orientation orientation, const int role = Qt::DisplayRole) const override;
@@ -380,12 +381,13 @@ class Playlist : public QAbstractListModel {
   void ClearCollectionItems();
 
  private Q_SLOTS:
-  void TracksAboutToBeDequeued(const QModelIndex&, const int begin, const int end);
+  void TracksAboutToBeDequeued(const QModelIndex &idx, const int begin, const int end);
   void TracksDequeued();
   void TracksEnqueued(const QModelIndex &parent_idx, const int begin, const int end);
   void QueueLayoutChanged();
-  void SongSaveComplete(TagReaderReplyPtr reply, const QPersistentModelIndex &idx);
-  void ItemReloadComplete(const QPersistentModelIndex &idx, const Song &new_metadata, const bool metadata_edit);
+  void SongSaveComplete(TagReaderReplyPtr reply, const QPersistentModelIndex &idx, const PlaylistItemPtr &item, const quint64 save_generation, const Song &pre_edit_metadata);
+  void ItemReload(const QPersistentModelIndex &idx, const bool metadata_edit, const PlaylistItemPtr &item, const quint64 save_generation, const Song &fallback_metadata);
+  void ItemReloadComplete(const QPersistentModelIndex &idx, const Song &new_metadata, const bool metadata_edit, const PlaylistItemPtr &item, const quint64 save_generation, const Song &fallback_metadata);
   void ItemsLoaded();
   void ScheduleSave();
   void ForceScheduleSave();

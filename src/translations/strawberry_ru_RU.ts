@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU" sourcelanguage="en-US">
   <context>
+    <name>ASXParser</name>
+    <message>
+      <source>ASX playlist is too large</source>
+      <translation>Плейлист ASX слишком велик</translation>
+    </message>
+    <message>
+      <source>Failed to write ASX playlist</source>
+      <translation>Не удалось записать плейлист ASX</translation>
+    </message>
+  </context>
+  <context>
     <name>About</name>
     <message>
       <source>About</source>
@@ -29,7 +40,7 @@
     </message>
     <message>
       <source>You should have received a copy of the GNU General Public License along with this program.  If not, see %1</source>
-      <translation>Вы должны были получить копию GNU General Public License вместе с этой программой. Если нет, смотрите раздел %1</translation>
+      <translation>Вы должны были получить копию Стандартной общественной лицензии GNU вместе с этой программой. Если нет, см. %1</translation>
     </message>
     <message>
       <source>If you like Strawberry and can make use of it, consider sponsoring or donating.</source>
@@ -361,10 +372,6 @@
       <translation>Стиль</translation>
     </message>
     <message>
-      <source>Use system theme icons</source>
-      <translation>Использовать системную тему значков</translation>
-    </message>
-    <message>
       <source>Tabbar colors</source>
       <translation>Цвета вкладок</translation>
     </message>
@@ -513,12 +520,104 @@
       <translation>Выбрать цвет активной песни в плейлисте:</translation>
     </message>
     <message>
+      <source>Window</source>
+      <translation>Окно</translation>
+    </message>
+    <message>
+      <source>Window text</source>
+      <translation>Текст окна</translation>
+    </message>
+    <message>
+      <source>Base</source>
+      <translation>Основа</translation>
+    </message>
+    <message>
+      <source>Alternate base</source>
+      <translation>Альтернативная основа</translation>
+    </message>
+    <message>
+      <source>Tooltip base</source>
+      <translation>Основа подсказки</translation>
+    </message>
+    <message>
+      <source>Tooltip text</source>
+      <translation>Текст подсказки</translation>
+    </message>
+    <message>
+      <source>Placeholder text</source>
+      <translation>Текст-заполнитель</translation>
+    </message>
+    <message>
+      <source>Text</source>
+      <translation>Текст</translation>
+    </message>
+    <message>
+      <source>Button</source>
+      <translation>Кнопка</translation>
+    </message>
+    <message>
+      <source>Button text</source>
+      <translation>Текст кнопки</translation>
+    </message>
+    <message>
+      <source>Bright text</source>
+      <translation>Яркий текст</translation>
+    </message>
+    <message>
+      <source>Select color</source>
+      <translation>Выбрать цвет</translation>
+    </message>
+    <message>
       <source>Select background image</source>
       <translation>Выбрать фоновое изображение</translation>
     </message>
     <message>
-      <source>You need to restart Strawberry for this setting to take affect.</source>
-      <translation>Вам необходимо перезапустить Strawberry, чтобы применить эту настройку.</translation>
+      <source>Colors</source>
+      <translation>Цвета</translation>
+    </message>
+    <message>
+      <source>&amp;Use the system default color set</source>
+      <translation>&amp;Использовать системный стандартный набор цветов</translation>
+    </message>
+    <message>
+      <source>Use a custom color set</source>
+      <translation>Использовать свой набор цветов</translation>
+    </message>
+    <message>
+      <source>Set a custom color set suitable for a dark theme</source>
+      <translation>Установить свой набор цветов, подходящий для тёмной темы</translation>
+    </message>
+    <message>
+      <source>Dark mode</source>
+      <translation>Тёмный режим</translation>
+    </message>
+    <message>
+      <source>Reset the custom color set to the system default colors</source>
+      <translation>Сбросить пользовательский набор цветов к системным цветам по умолчанию</translation>
+    </message>
+    <message>
+      <source>Reset to default</source>
+      <translation>Восстановить значения по умолчанию</translation>
+    </message>
+    <message>
+      <source>You might need to restart Strawberry for this setting to fully apply</source>
+      <translation>Возможно, вам потребуется перезапустить Strawberry для применения этой на настройки</translation>
+    </message>
+    <message>
+      <source>You need to restart Strawberry for this setting to take affect</source>
+      <translation>Вам необходимо перезапустить Strawberry, чтобы применить эту настройку</translation>
+    </message>
+    <message>
+      <source>System icons</source>
+      <translation>Системные значки</translation>
+    </message>
+    <message>
+      <source>Changing colors is only supported with some styles</source>
+      <translation>Изменение цветов поддерживается только в некоторых стилях</translation>
+    </message>
+    <message>
+      <source>Dark colors</source>
+      <translation>Тёмные цвета</translation>
     </message>
   </context>
   <context>
@@ -581,7 +680,7 @@
     </message>
     <message>
       <source>Use playbin3 when available</source>
-      <translation>Использовать playbin3 при наличии</translation>
+      <translation>Использовать Playbin3 при наличии</translation>
     </message>
     <message>
       <source>Enable HTTP/2 for streaming</source>
@@ -698,6 +797,22 @@
     <message>
       <source>You need to restart Strawberry for this setting to take affect</source>
       <translation>Вам необходимо перезапустить Strawberry, чтобы применить эту настройку</translation>
+    </message>
+    <message>
+      <source>Map the volume slider to a decibel scale so that perceived loudness changes evenly. Each 1% step equals 0.5 dB, 100% is 0 dB and 0% is silence.</source>
+      <translation>Привязать ползунок громкости к шкале в децибелах, чтобы изменение воспринимаемой громкости было равномерным. Каждый шаг в 1% соответствует 0,5 дБ, 100% — это 0 дБ, а 0% — это тишина.</translation>
+    </message>
+    <message>
+      <source>Exponential volume scaling</source>
+      <translation>Экспоненциальная шкала громкости</translation>
+    </message>
+    <message>
+      <source>Device warm-up</source>
+      <translation>Прогрев устройства</translation>
+    </message>
+    <message>
+      <source>Delay between opening the audio device and starting playback, to avoid the start of the track being cut off while the device (DAC) is still becoming ready.  Set to 0 to disable.</source>
+      <translation>Задержка перед воспроизведением после открытия аудиоустройства. Предотвращает обрезание начала трека, пока устройство (ЦАП) подготавливается к работе. Установите 0 для отключения.</translation>
     </message>
   </context>
   <context>
@@ -852,6 +967,10 @@
     <message>
       <source>Error while setting CDDA device to pause state.</source>
       <translation>Ошибка при установке устройства CDDA в состояние паузы.</translation>
+    </message>
+    <message>
+      <source>The &apos;track&apos; format is not supported by GStreamer.</source>
+      <translation>Формат &apos;track&apos; не поддерживается GStreamer.</translation>
     </message>
     <message>
       <source>Error while querying CDDA tracks.</source>
@@ -1031,7 +1150,7 @@
   <context>
     <name>CollectionLibrary</name>
     <message>
-      <source>Support for sort tags artist, album, album artist, title, composer, and performer</source>
+      <source>Support for sort tags artist, album, album artist, title, composer and performer</source>
       <translation>Поддержка сортировки тегов артиста, альбома, исполнителя альбома, названия, композитора и исполнителя</translation>
     </message>
     <message>
@@ -1136,9 +1255,7 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
     <message>
       <source>Skip leading articles (&quot;the&quot;, &quot;a&quot;, &quot;an&quot;) when sorting artists, composers and performers</source>
-      <translation>Опускать начальные артикли («the», «a», «an») при сортировке артистов, композиторов и исполнителей
-
-Не учитывать</translation>
+      <translation>Опускать начальные артикли («the», «a», «an») при сортировке артистов, композиторов и исполнителей</translation>
     </message>
     <message>
       <source>Skip leading articles (&quot;the&quot;, &quot;a&quot;, &quot;an&quot;) when sorting albums</source>
@@ -3004,82 +3121,16 @@ If there are no matches then it will use the largest image in the directory.</so
       <source>Separate albums by grouping tag</source>
       <translation>Разделять альбому по тегу группировки</translation>
     </message>
+    <message>
+      <source>Original year - Album - Disc</source>
+      <translation>Год оригинала - Альбом - Диск</translation>
+    </message>
   </context>
   <context>
     <name>GstEngine</name>
     <message>
       <source>Buffering</source>
       <translation>Буферизация</translation>
-    </message>
-  </context>
-  <context>
-    <name>LastFMImport</name>
-    <message>
-      <source>Missing username, please login to last.fm first!</source>
-      <translation>Отсутствует имя пользователя, пожалуйста, сперва авторизируйтесь в Last.fm!</translation>
-    </message>
-  </context>
-  <context>
-    <name>LastFMImportDialog</name>
-    <message>
-      <source>Import data from last.fm</source>
-      <translation>Импорт данных из Last.fm</translation>
-    </message>
-    <message>
-      <source>Choose data to import from last.fm</source>
-      <translation>Выберите данные для импорта из Last.fm</translation>
-    </message>
-    <message>
-      <source>Last played</source>
-      <translation>Последний раз</translation>
-    </message>
-    <message>
-      <source>Play counts</source>
-      <translation>Счётчики прослушивания</translation>
-    </message>
-    <message>
-      <source>Warning: Play counts and last played from last.fm will completely replace the same data for the matched songs. Play counts will replace the data based on artist and song title for the same albums! Please backup your database before you start.</source>
-      <translation>Предупреждение: Счётчики прослушиваний и последние проигрывания с Last.fm полностью заменят те же данные в соответствующих песнях. Счётчики прослушиваний заменят данные, основанные на артисте и названии песни для тех же альбомов! Пожалуйста, сделайте резервную копию вашей базы данных перед запуском.</translation>
-    </message>
-    <message>
-      <source>Go!</source>
-      <translation>Пуск!</translation>
-    </message>
-    <message>
-      <source>Close</source>
-      <translation>Закрыть</translation>
-    </message>
-    <message>
-      <source>Cancel</source>
-      <translation>Отмена</translation>
-    </message>
-    <message>
-      <source>Receiving initial data from last.fm...</source>
-      <translation>Получение исходных данных от Last.fm…</translation>
-    </message>
-    <message>
-      <source>Receiving playcount for %1 songs and last played for %2 songs.</source>
-      <translation>Получение счётчиков прослушивания для %1 песен и последнее прослушивание для %2 песен.</translation>
-    </message>
-    <message>
-      <source>Receiving last played for %1 songs.</source>
-      <translation>Получение последнего прослушивание для %1 песен.</translation>
-    </message>
-    <message>
-      <source>Receiving playcounts for %1 songs.</source>
-      <translation>Получение счётчиков прослушивания для %1 песен.</translation>
-    </message>
-    <message>
-      <source>Playcounts for %1 songs and last played for %2 songs received.</source>
-      <translation>Получены счётчики прослушивания для %1 песен и последнее прослушивание для %2 песен.</translation>
-    </message>
-    <message>
-      <source>Last played for %1 songs received.</source>
-      <translation>Последнее прослушивание для %1 песен получено.</translation>
-    </message>
-    <message>
-      <source>Playcounts for %1 songs received.</source>
-      <translation>Получены счётчики прослушивания для %1 песен.</translation>
     </message>
   </context>
   <context>
@@ -3347,10 +3398,6 @@ If there are no matches then it will use the largest image in the directory.</so
       <translation>Пере&amp;мешать плейлист</translation>
     </message>
     <message>
-      <source>Ctrl+H</source>
-      <translation>Ctrl+H</translation>
-    </message>
-    <message>
       <source>&amp;Add file...</source>
       <translation>&amp;Добавить файл…</translation>
     </message>
@@ -3501,10 +3548,6 @@ If there are no matches then it will use the largest image in the directory.</so
     <message>
       <source>Show sidebar</source>
       <translation>Показывать боковую панель</translation>
-    </message>
-    <message>
-      <source>Import data from last.fm...</source>
-      <translation>Импорт данных из Last.fm…</translation>
     </message>
     <message>
       <source>Context</source>
@@ -3738,6 +3781,22 @@ If there are no matches then it will use the largest image in the directory.</so
       <source>Collection rescan notice</source>
       <translation>Уведомление о пересканировании фонотеки</translation>
     </message>
+    <message>
+      <source>Ctrl+Shift+H</source>
+      <translation>Ctrl+Shift+H</translation>
+    </message>
+    <message>
+      <source>Go to last playlist tab</source>
+      <translation>Перейти к последней вкладке плейлиста</translation>
+    </message>
+    <message>
+      <source>Go to active playlist tab</source>
+      <translation>Перейти к активной вкладке плейлиста</translation>
+    </message>
+    <message>
+      <source>Close current playlist tab</source>
+      <translation>Закрыть текущую вкладку плейлиста</translation>
+    </message>
   </context>
   <context>
     <name>MessageDialog</name>
@@ -3758,25 +3817,10 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
   </context>
   <context>
-    <name>MoodbarProxyStyle</name>
-    <message>
-      <source>Show moodbar</source>
-      <translation>Показывать индикатор тона</translation>
-    </message>
-    <message>
-      <source>Moodbar style</source>
-      <translation>Стиль индикатора тона</translation>
-    </message>
-  </context>
-  <context>
     <name>MoodbarSettingsPage</name>
     <message>
       <source>Moodbar</source>
       <translation>Индикатор тона</translation>
-    </message>
-    <message>
-      <source>Show a moodbar in the track progress bar</source>
-      <translation>Показывать индикатор тона в полосе прогресса</translation>
     </message>
     <message>
       <source>Moodbar style</source>
@@ -3784,11 +3828,7 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
     <message>
       <source>Save the .mood files directly in the songs folders</source>
-      <translation>Сохранять файлы тона .mood в папках песен</translation>
-    </message>
-    <message>
-      <source>Enabled</source>
-      <translation>Включено</translation>
+      <translation>Сохранять файлы тона .mood непосредственно в папках песен</translation>
     </message>
   </context>
   <context>
@@ -3870,6 +3910,10 @@ If there are no matches then it will use the largest image in the directory.</so
     <message>
       <source>Use proxy settings for streaming</source>
       <translation>Использовать настройки прокси для проигрывания потоков</translation>
+    </message>
+    <message>
+      <source>Only HTTP proxy is supported for streaming.</source>
+      <translation>Для потоковой передачи поддерживается только HTTP-прокси.</translation>
     </message>
   </context>
   <context>
@@ -4105,7 +4149,7 @@ If there are no matches then it will use the largest image in the directory.</so
     </message>
     <message>
       <source>Enable Rich Presence</source>
-      <translation>Включить режим Rich Presence</translation>
+      <translation>Включить статус активности Rich Presence</translation>
     </message>
     <message>
       <source>&quot;Listening to...&quot;</source>
@@ -5865,10 +5909,162 @@ Are you sure you want to continue?</source>
     </message>
   </context>
   <context>
+    <name>RadioBrowserSearchModel</name>
+    <message>
+      <source>Name</source>
+      <translation>Имя</translation>
+    </message>
+    <message>
+      <source>Country</source>
+      <translation>Страна</translation>
+    </message>
+    <message>
+      <source>Tags</source>
+      <translation>Теги</translation>
+    </message>
+    <message>
+      <source>Codec</source>
+      <translation>Кодек</translation>
+    </message>
+  </context>
+  <context>
+    <name>RadioBrowserSearchView</name>
+    <message>
+      <source>Load more...</source>
+      <translation>Загрузить больше…</translation>
+    </message>
+    <message>
+      <source>Search for radio stations using radio-browser.info</source>
+      <translation>Поиск радиостанций с помощью radio-browser.info</translation>
+    </message>
+    <message>
+      <source>Search radio stations...</source>
+      <translation>Поиск радиостанций…</translation>
+    </message>
+    <message>
+      <source>All countries</source>
+      <translation>Все страны</translation>
+    </message>
+    <message>
+      <source>By votes</source>
+      <translation>По голосам</translation>
+    </message>
+    <message>
+      <source>By clicks</source>
+      <translation>По щелчкам</translation>
+    </message>
+    <message>
+      <source>By name</source>
+      <translation>По имени</translation>
+    </message>
+    <message>
+      <source>By bitrate</source>
+      <translation>По битрейту</translation>
+    </message>
+    <message>
+      <source>Searching...</source>
+      <translation>Поиск…</translation>
+    </message>
+    <message>
+      <source>No stations found.</source>
+      <translation>Станции не найдены.</translation>
+    </message>
+    <message>
+      <source>%1 stations found</source>
+      <translation>Найдено станций: %1</translation>
+    </message>
+    <message>
+      <source>Append to current playlist</source>
+      <translation>Добавить в текущий плейлист</translation>
+    </message>
+  </context>
+  <context>
+    <name>RadioBrowserService</name>
+    <message>
+      <source>No Radio Browser server available.</source>
+      <translation>Сервер Radio Browser не доступен.</translation>
+    </message>
+    <message>
+      <source>Searching Radio Browser</source>
+      <translation>Поиск в Radio Browser</translation>
+    </message>
+    <message>
+      <source>Radio Browser search failed: %1</source>
+      <translation>Не удалось выполнить поиск в Radio Browser: %1</translation>
+    </message>
+  </context>
+  <context>
     <name>RadioParadiseService</name>
     <message>
       <source>Getting %1 channels</source>
       <translation>Получение каналов %1</translation>
+    </message>
+  </context>
+  <context>
+    <name>RadioSettingsPage</name>
+    <message>
+      <source>Radios</source>
+      <translation>Радио</translation>
+    </message>
+    <message>
+      <source>SomaFM</source>
+      <translation>SomaFM</translation>
+    </message>
+    <message>
+      <source>Stream quality:</source>
+      <translation>Качество потока:</translation>
+    </message>
+    <message>
+      <source>Radio Browser</source>
+      <translation>Radio Browser</translation>
+    </message>
+    <message>
+      <source>Search results limit:</source>
+      <translation>Предел результатов поиска:</translation>
+    </message>
+    <message>
+      <source>Hide broken stations</source>
+      <translation>Скрывать нерабочие станции</translation>
+    </message>
+    <message>
+      <source>Default sort order:</source>
+      <translation>Сортировка по умолчанию:</translation>
+    </message>
+    <message>
+      <source>Default country:</source>
+      <translation>Страна по умолчанию:</translation>
+    </message>
+    <message>
+      <source>All countries</source>
+      <translation>Все страны</translation>
+    </message>
+    <message>
+      <source>Highest</source>
+      <translation>Самое высокое</translation>
+    </message>
+    <message>
+      <source>High</source>
+      <translation>Высокое</translation>
+    </message>
+    <message>
+      <source>Low</source>
+      <translation>Низкое</translation>
+    </message>
+    <message>
+      <source>By votes</source>
+      <translation>По голосам</translation>
+    </message>
+    <message>
+      <source>By clicks</source>
+      <translation>По щелчкам</translation>
+    </message>
+    <message>
+      <source>By name</source>
+      <translation>По имени</translation>
+    </message>
+    <message>
+      <source>By bitrate</source>
+      <translation>По битрейту</translation>
     </message>
   </context>
   <context>
@@ -5903,6 +6099,14 @@ Are you sure you want to continue?</source>
     <message>
       <source>Form</source>
       <translation>Форма</translation>
+    </message>
+    <message>
+      <source>Channels</source>
+      <translation>Каналы</translation>
+    </message>
+    <message>
+      <source>Radio Browser</source>
+      <translation>Radio Browser</translation>
     </message>
   </context>
   <context>
@@ -6294,11 +6498,11 @@ Are you sure you want to continue?</source>
     </message>
     <message>
       <source>%1 songs found (showing %2)</source>
-      <translation>Найдено %1 песен (отображается %2)</translation>
+      <translation>Найдено песен: %1 (отображается %2)</translation>
     </message>
     <message>
       <source>%1 songs found</source>
-      <translation>Найдено %1 песен</translation>
+      <translation>Найдено песен: %1</translation>
     </message>
   </context>
   <context>
@@ -6457,45 +6661,6 @@ Are you sure you want to continue?</source>
     <message>
       <source>Restore defaults</source>
       <translation>Восстановить настройки по умолчанию</translation>
-    </message>
-  </context>
-  <context>
-    <name>SnapDialog</name>
-    <message>
-      <source>Strawberry is running as a Snap</source>
-      <translation>Strawberry работает через Snap</translation>
-    </message>
-    <message>
-      <source>It is detected that Strawberry is running as a Snap</source>
-      <translation>Обнаружено, что Strawberry работает через Snap</translation>
-    </message>
-    <message>
-      <source>Strawberry is slower, and has restrictions when running as a Snap. Accessing the root filesystem (/) will not work. There also might be other restrictions such as accessing certain devices or network shares.</source>
-      <translation>Strawberry работает медленно и ограниченно при запуске через Snap. Доступ к корневой файловой системе (/) не будет работать. Также могут существовать другие ограничения, связанные с доступом к определённым устройствам или общим сетевым ресурсам.</translation>
-    </message>
-    <message>
-      <source>For Ubuntu there is an official PPA repository available at %1.</source>
-      <translation>Для Ubuntu доступен официальный репозиторий PPA в %1.</translation>
-    </message>
-    <message>
-      <source>Official releases are available for Debian and Ubuntu which also work on most of their derivatives. See %1 for more information.</source>
-      <translation>Официальные выпуски доступны для Debian и Ubuntu, они также работают с большинством их производных. См. подробности на %1.</translation>
-    </message>
-    <message>
-      <source>For a better experience please consider the other options above.</source>
-      <translation>Для лучшего опыта, пожалуйста, рассмотрите другие варианты выше.</translation>
-    </message>
-    <message>
-      <source>Copy your strawberry.conf and strawberry.db from your ~/snap directory to avoid losing configuration before you uninstall the snap:</source>
-      <translation>Скопируйте ваши strawberry.conf и strawberry.db из вашего каталога ~/snap, чтобы избежать потери настроек, перед удалением snap:</translation>
-    </message>
-    <message>
-      <source>Uninstall the snap with:</source>
-      <translation>Удалить Snap с помощью:</translation>
-    </message>
-    <message>
-      <source>Install strawberry through PPA:</source>
-      <translation>Установить Strawberry через PPA:</translation>
     </message>
   </context>
   <context>
@@ -6959,7 +7124,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
       <source>Use album ID for album covers</source>
-      <translation>Используйте ID альбома для обложек альбомов</translation>
+      <translation>Использовать идентификатор альбома для обложки альбома</translation>
     </message>
     <message>
       <source>Server-side scrobbling</source>
@@ -7023,6 +7188,14 @@ Are you sure you want to continue?</source>
   <context>
     <name>TagFetcher</name>
     <message>
+      <source>Stage: %1</source>
+      <translation>Этап: %1</translation>
+    </message>
+    <message>
+      <source>Reason: %1</source>
+      <translation>Причина: %1</translation>
+    </message>
+    <message>
       <source>Identifying song</source>
       <translation>Определяется песня</translation>
     </message>
@@ -7031,8 +7204,36 @@ Are you sure you want to continue?</source>
       <translation>Получается отпечаток песни</translation>
     </message>
     <message>
+      <source>Generated fingerprint is empty or invalid</source>
+      <translation>Созданный отпечаток пуст или недействителен</translation>
+    </message>
+    <message>
+      <source>Fingerprinting</source>
+      <translation>Создание отпечатка</translation>
+    </message>
+    <message>
+      <source>Fingerprint length: %1</source>
+      <translation>Длина отпечатка: %1</translation>
+    </message>
+    <message>
+      <source>Minimum required length: %1</source>
+      <translation>Минимальная необходимая длина: %1</translation>
+    </message>
+    <message>
       <source>Downloading metadata</source>
       <translation>Загружаются метаданные</translation>
+    </message>
+    <message>
+      <source>No MusicBrainz metadata was found for this track</source>
+      <translation>Для этого трека не найдены метаданные MusicBrainz</translation>
+    </message>
+    <message>
+      <source>MusicBrainz metadata</source>
+      <translation>Метаданные MusicBrainz</translation>
+    </message>
+    <message>
+      <source>Candidate metadata rows: 0</source>
+      <translation>Строк с подходящими метаданными: 0</translation>
     </message>
   </context>
   <context>
@@ -7161,7 +7362,7 @@ Are you sure you want to continue?</source>
     </message>
     <message>
       <source>Append explicit to album title for explicit albums</source>
-      <translation>Добавлять «Explicit» в имена альбомов с нецензурной лексикой</translation>
+      <translation>Добавлять «Explicit» в имена альбомов с матом</translation>
     </message>
     <message>
       <source>Configuration incomplete</source>
@@ -7206,10 +7407,6 @@ Are you sure you want to continue?</source>
       <translation>Сборщик тегов</translation>
     </message>
     <message>
-      <source>Sorry</source>
-      <translation>Извините</translation>
-    </message>
-    <message>
       <source>Strawberry was unable to find results for this file</source>
       <translation>Strawberry не смог найти результаты по запросу для этого файла</translation>
     </message>
@@ -7246,6 +7443,10 @@ Are you sure you want to continue?</source>
       <translation>Следующий</translation>
     </message>
     <message>
+      <source>Error</source>
+      <translation>Ошибка</translation>
+    </message>
+    <message>
       <source>Original tags</source>
       <translation>Исходные теги</translation>
     </message>
@@ -7261,6 +7462,10 @@ Are you sure you want to continue?</source>
       <source>Album artist</source>
       <translation>Артист альбома</translation>
     </message>
+    <message>
+      <source>No results</source>
+      <translation>Нет результатов</translation>
+    </message>
   </context>
   <context>
     <name>TrackSlider</name>
@@ -7275,6 +7480,22 @@ Are you sure you want to continue?</source>
     <message>
       <source>Click to toggle between remaining time and total time</source>
       <translation>Щёлкните для переключения между оставшимся и полным временем</translation>
+    </message>
+    <message>
+      <source>Normal</source>
+      <translation>Спокойный</translation>
+    </message>
+    <message>
+      <source>Moodbar</source>
+      <translation>Индикатор тона</translation>
+    </message>
+    <message>
+      <source>Moodbar style</source>
+      <translation>Стиль индикатора тона</translation>
+    </message>
+    <message>
+      <source>Waveform</source>
+      <translation>Форма волны</translation>
     </message>
   </context>
   <context>
@@ -7803,6 +8024,32 @@ Are you sure you want to continue?</source>
     <message>
       <source>Password</source>
       <translation>Пароль</translation>
+    </message>
+  </context>
+  <context>
+    <name>WaveformSettingsPage</name>
+    <message>
+      <source>Waveform</source>
+      <translation>Форма волны</translation>
+    </message>
+    <message>
+      <source>Color</source>
+      <translation>Цвет</translation>
+    </message>
+    <message>
+      <source>Select waveform color</source>
+      <translation>Выбрать цвет формы волны</translation>
+    </message>
+    <message>
+      <source>Save the .waveform files directly in the songs folders</source>
+      <translation>Сохранять файлы .waveform непосредственно в папках песен</translation>
+    </message>
+  </context>
+  <context>
+    <name>XSPFParser</name>
+    <message>
+      <source>Failed to write XSPF playlist</source>
+      <translation>Не удалось записать плейлист XSPF</translation>
     </message>
   </context>
 </TS>

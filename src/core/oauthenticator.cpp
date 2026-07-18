@@ -46,7 +46,6 @@
 #include "oauthenticator.h"
 
 using namespace Qt::Literals::StringLiterals;
-using std::make_shared;
 using namespace std::chrono_literals;
 
 namespace {
@@ -338,8 +337,6 @@ void OAuthenticator::AuthorizationUrlReceived(const QUrl &request_url, const QUr
     Q_EMIT AuthenticationFinished(false, tr("Redirect URL is missing query."));
     return;
   }
-
-  qLog(Debug) << settings_group_ << "Authorization URL Received" << request_url.toDisplayString();
 
   QUrlQuery url_query(request_url);
 

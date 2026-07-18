@@ -47,7 +47,6 @@
 #include "constants/subsonicsettings.h"
 
 using namespace Qt::Literals::StringLiterals;
-using std::make_shared;
 
 SubsonicBaseRequest::SubsonicBaseRequest(SubsonicService *service, QObject *parent)
     : QObject(parent),
@@ -112,6 +111,7 @@ QNetworkReply *SubsonicBaseRequest::CreateGetRequest(const QString &ressource_na
   network_request.setHeader(QNetworkRequest::ContentTypeHeader, u"application/x-www-form-urlencoded"_s);
   network_request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
   network_request.setAttribute(QNetworkRequest::Http2AllowedAttribute, http2());
+  network_request.setTransferTimeout(QNetworkRequest::DefaultTransferTimeoutConstant);
 
   QNetworkReply *reply = network_->get(network_request);
   QObject::connect(reply, &QNetworkReply::sslErrors, this, &SubsonicBaseRequest::HandleSSLErrors);

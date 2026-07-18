@@ -408,7 +408,7 @@ QVariant Playlist::data(const QModelIndex &idx, const int role) const {
       return QVariant(column_alignments_.value(idx.column(), (Qt::AlignLeft | Qt::AlignVCenter)));
 
     case Qt::ForegroundRole:
-      if (data(idx, Role_IsCurrent).toBool()) {
+      if (current_item_index_.isValid() && idx.row() == current_item_index_.row()) {
         // Ignore any custom colours for the currently playing item - they might clash with the glowing current track indicator.
         return QVariant();
       }
@@ -423,7 +423,7 @@ QVariant Playlist::data(const QModelIndex &idx, const int role) const {
       return QVariant();
 
     case Qt::BackgroundRole:
-      if (data(idx, Role_IsCurrent).toBool()) {
+      if (current_item_index_.isValid() && idx.row() == current_item_index_.row()) {
         // Ignore any custom colours for the currently playing item - they might clash with the glowing current track indicator.
         return QVariant();
       }
@@ -459,18 +459,26 @@ bool Playlist::setData(const QModelIndex &idx, const QVariant &value, const int 
 
   const int row = idx.row();
   const PlaylistItemPtr item = item_at(row);
-  Song song = item->OriginalMetadata();
+  const Song pre_edit_metadata = item->OriginalMetadata();
+  Song song = pre_edit_metadata;
 
   if (idx.data() == value) return false;
 
   if (!set_column_value(song, static_cast<Column>(idx.column()), value)) return false;
 
   if (song.url().isLocalFile()) {
+    // Show the edit immediately: otherwise the cell keeps displaying the pre-edit value (the view re-reads it right after the editor closes) until the write-then-reread round trip below completes asynchronously, which can take a perceptible moment and looks like the edit was reverted.
+    UpdateItemMetadata(row, item, song, false);
+    Q_EMIT EditingFinished(id_, idx);
+
+    // Bump the item's save generation so a still-in-flight completion from an earlier edit to this same item can recognize (once it eventually completes) that it has been superseded, and avoid clobbering this newer edit with its own stale result.
+    const quint64 save_generation = item->BumpSaveGeneration();
+
     TagReaderReplyPtr reply = tagreader_client_->WriteFileAsync(song.url().toLocalFile(), song);
     QPersistentModelIndex persistent_index = QPersistentModelIndex(idx);
     SharedPtr<QMetaObject::Connection> connection = make_shared<QMetaObject::Connection>();
-    *connection = QObject::connect(&*reply, &TagReaderReply::Finished, this, [this, reply, persistent_index, item, connection]() {
-      SongSaveComplete(reply, persistent_index);
+    *connection = QObject::connect(&*reply, &TagReaderReply::Finished, this, [this, reply, persistent_index, item, save_generation, pre_edit_metadata, connection]() {
+      SongSaveComplete(reply, persistent_index, item, save_generation, pre_edit_metadata);
       QObject::disconnect(*connection);
     }, Qt::QueuedConnection);
   }
@@ -485,54 +493,69 @@ bool Playlist::setData(const QModelIndex &idx, const QVariant &value, const int 
 
 }
 
-void Playlist::SongSaveComplete(TagReaderReplyPtr reply, const QPersistentModelIndex &idx) {
+void Playlist::SongSaveComplete(TagReaderReplyPtr reply, const QPersistentModelIndex &idx, const PlaylistItemPtr &item, const quint64 save_generation, const Song &pre_edit_metadata) {
 
-  if (idx.isValid()) {
-    if (reply->success()) {
-      ItemReload(idx, true);
+  if (!idx.isValid()) return;
+
+  // A newer edit has already superseded this write (its own completion, still pending or already applied, is responsible for reconciling the item), so touching the item now would race it and could clobber the newer optimistic value with this stale write's outcome.
+  if (item->save_generation() != save_generation) return;
+
+  if (!reply->success()) {
+    if (reply->error().isEmpty()) {
+      Q_EMIT Error(tr("Could not write metadata to %1").arg(reply->filename()));
     }
     else {
-      if (reply->error().isEmpty()) {
-        Q_EMIT Error(tr("Could not write metadata to %1").arg(reply->filename()));
-      }
-      else {
-        Q_EMIT Error(tr("Could not write metadata to %1: %2").arg(reply->filename(), reply->error()));
-      }
+      Q_EMIT Error(tr("Could not write metadata to %1: %2").arg(reply->filename(), reply->error()));
     }
+    // Resync with the actual file contents rather than assuming pre_edit_metadata still matches what's on disk: with consecutive edits to the same item, pre_edit_metadata is whatever the previous (optimistic) edit left in place, which can itself be a value that was never successfully written (e.g. its own write is still in flight, or already failed but was ignored here due to the generation guard above). Reading the file collapses any such chain of unconfirmed edits to the genuine on-disk state. Only if that reload itself fails to read the file do we fall back to pre_edit_metadata as a last resort.
+    ItemReload(idx, true, item, save_generation, pre_edit_metadata);
+    return;
   }
+
+  // Resync with the actual file contents: this confirms the value already shown optimistically by setData(), picking up any normalization the tag writer applied.
+  ItemReload(idx, true, item, save_generation, Song());
 
 }
 
 void Playlist::ItemReload(const QPersistentModelIndex &idx, const bool metadata_edit) {
 
   if (idx.isValid()) {
-    PlaylistItemPtr item = item_at(idx.row());
+    const PlaylistItemPtr item = item_at(idx.row());
     if (item) {
-      QFuture<Song> future = item->BackgroundReload();
-      QFutureWatcher<Song> *watcher = new QFutureWatcher<Song>();
-      QObject::connect(watcher, &QFutureWatcher<Song>::finished, this, [this, watcher, idx, metadata_edit]() {
-        ItemReloadComplete(idx, watcher->result(), metadata_edit);
-        watcher->deleteLater();
-      });
-      watcher->setFuture(future);
+      ItemReload(idx, metadata_edit, item, item->save_generation(), Song());
     }
   }
 
 }
 
-void Playlist::ItemReloadComplete(const QPersistentModelIndex &idx, const Song &new_metadata, const bool metadata_edit) {
+void Playlist::ItemReload(const QPersistentModelIndex &idx, const bool metadata_edit, const PlaylistItemPtr &item, const quint64 save_generation, const Song &fallback_metadata) {
+
+  QFuture<Song> future = item->BackgroundReload(tagreader_client_);
+  QFutureWatcher<Song> *watcher = new QFutureWatcher<Song>(this);
+  QObject::connect(watcher, &QFutureWatcher<Song>::finished, this, [this, watcher, idx, metadata_edit, item, save_generation, fallback_metadata]() {
+    ItemReloadComplete(idx, watcher->result(), metadata_edit, item, save_generation, fallback_metadata);
+    watcher->deleteLater();
+  });
+  watcher->setFuture(future);
+
+}
+
+void Playlist::ItemReloadComplete(const QPersistentModelIndex &idx, const Song &new_metadata, const bool metadata_edit, const PlaylistItemPtr &item, const quint64 save_generation, const Song &fallback_metadata) {
 
   if (idx.isValid()) {
-    const PlaylistItemPtr item = item_at(idx.row());
-    if (item) {
-      if (new_metadata.is_valid()) {
-        UpdateItemMetadata(idx.row(), item, new_metadata, false);
-      }
-      if (metadata_edit) {
-        Q_EMIT EditingFinished(id_, idx);
-      }
-      ScheduleSaveAsync();
+    // Another edit superseded this one while the reload was in flight: skip applying this now-stale result so it doesn't clobber the newer edit.
+    if (item->save_generation() != save_generation) return;
+    if (new_metadata.is_valid()) {
+      UpdateItemMetadata(idx.row(), item, new_metadata, false);
     }
+    else if (fallback_metadata.is_valid()) {
+      // The reload itself failed to read the file (e.g. a transient I/O error): fall back to the best metadata we still have rather than leaving whatever optimistic value was showing beforehand, which in the write-failure path this fallback comes from is known to have never been written to disk.
+      UpdateItemMetadata(idx.row(), item, fallback_metadata, false);
+    }
+    if (metadata_edit) {
+      Q_EMIT EditingFinished(id_, idx);
+    }
+    ScheduleSaveAsync();
   }
 
 }
@@ -1685,7 +1708,7 @@ void Playlist::Restore() {
 
   cancel_restore_ = false;
   QFuture<PlaylistItemPtrList> future = QtConcurrent::run(&PlaylistBackend::GetPlaylistItems, playlist_backend_, id_);
-  QFutureWatcher<PlaylistItemPtrList> *watcher = new QFutureWatcher<PlaylistItemPtrList>();
+  QFutureWatcher<PlaylistItemPtrList> *watcher = new QFutureWatcher<PlaylistItemPtrList>(this);
   QObject::connect(watcher, &QFutureWatcher<PlaylistItemPtrList>::finished, this, &Playlist::ItemsLoaded);
   watcher->setFuture(future);
 
@@ -1747,7 +1770,7 @@ void Playlist::ItemsLoaded() {
 
   Settings s;
   s.beginGroup(PlaylistSettings::kSettingsGroup);
-  bool greyout = s.value(PlaylistSettings::kGreyoutSongsStartup, false).toBool();
+  bool greyout = s.value(PlaylistSettings::kGreyoutSongsStartup, PlaylistSettings::kDefaultGreyoutSongsStartup).toBool();
   s.endGroup();
 
   // Should we gray out deleted songs asynchronously on startup?
@@ -1785,6 +1808,10 @@ void Playlist::RemoveItemsWithoutUndo(const QList<int> &indicesIn) {
 bool Playlist::removeRows(const int row, const int count, const QModelIndex &parent) {
 
   Q_UNUSED(parent);
+
+  if (count <= 0) {
+    return true;
+  }
 
   if (row < 0 || row >= items_.size() || row + count > items_.size()) {
     return false;
@@ -1834,7 +1861,7 @@ bool Playlist::removeRows(QList<int> &rows) {
 
 PlaylistItemPtrList Playlist::RemoveItemsWithoutUndo(const int row, const int count) {
 
-  if (row < 0 || row >= items_.size() || row + count > items_.size()) {
+  if (count <= 0 || row < 0 || row >= items_.size() || row + count > items_.size()) {
     return PlaylistItemPtrList();
   }
 
@@ -1900,7 +1927,7 @@ PlaylistItemPtrList Playlist::RemoveItemsWithoutUndo(const int row, const int co
 bool Playlist::RemoveItemWithSignal(PlaylistItemPtr item) {
 
   item->set_signal(true);
-  return removeRows(items_.indexOf(item), 1);
+  return removeRows(static_cast<int>(items_.indexOf(item)), 1);
 
 }
 
@@ -2683,7 +2710,7 @@ void Playlist::SkipTracks(const QModelIndexList &source_indexes) {
 
   for (const QModelIndex &source_index : source_indexes) {
     PlaylistItemPtr track_to_skip = item_at(source_index.row());
-    track_to_skip->SetShouldSkip(!((track_to_skip)->GetShouldSkip()));
+    track_to_skip->SetShouldSkip(!(track_to_skip->GetShouldSkip()));
     Q_EMIT dataChanged(source_index, source_index);
   }
 
