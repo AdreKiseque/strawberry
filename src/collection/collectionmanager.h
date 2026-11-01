@@ -2,7 +2,7 @@
  * Strawberry Music Player
  * This file was part of Clementine.
  * Copyright 2010, David Sansome <me@davidsansome.com>
- * Copyright 2018-2025, Jonas Kvinge <jonas@jkvinge.net>
+ * Copyright 2018-2026, Jonas Kvinge <jonas@jkvinge.net>
  *
  * Strawberry is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,15 @@
  *
  */
 
-#ifndef COLLECTION_H
-#define COLLECTION_H
+#ifndef COLLECTIONMANAGER_H
+#define COLLECTIONMANAGER_H
 
 #include "config.h"
 
+#include <atomic>
+
 #include <QObject>
+#include <QFuture>
 #include <QList>
 #include <QHash>
 #include <QMap>
@@ -43,17 +46,17 @@ class CollectionModel;
 class CollectionWatcher;
 class AlbumCoverLoader;
 
-class CollectionLibrary : public QObject {
+class CollectionManager : public QObject {
   Q_OBJECT
 
  public:
-  explicit CollectionLibrary(const SharedPtr<Database> database,
+  explicit CollectionManager(const SharedPtr<Database> database,
                              const SharedPtr<TaskManager> task_manager,
                              const SharedPtr<TagReaderClient> tagreader_client,
                              const SharedPtr<AlbumCoverLoader> albumcover_loader,
                              QObject *parent = nullptr);
 
-  ~CollectionLibrary() override;
+  ~CollectionManager() override;
 
   static const char *kSongsTable;
   static const char *kFtsTable;
@@ -64,6 +67,7 @@ class CollectionLibrary : public QObject {
   void Exit();
 
   SharedPtr<CollectionBackend> backend() const { return backend_; }
+  CollectionWatcher *watcher() const { return watcher_; }
   CollectionModel *model() const { return model_; }
 
   QString full_rescan_reason(const int schema_version) const { return full_rescan_revisions_.value(schema_version, QString()); }
@@ -72,13 +76,19 @@ class CollectionLibrary : public QObject {
 
  private:
   void SyncPlaycountAndRatingToFiles();
-  void SavePendingPlaycountsAndRatings();
+  void SavePendingSongSaves();
+  static Song CurrentLyricsToSave(const SharedPtr<CollectionBackend> &backend, const Song &song);
+  void SaveLyricsToFile(const Song &song);
+  void LyricsSaveFinished();
+  void SavePendingSongSavesAndExit();
+  void ExitBackendAndWatcher();
+  void CheckExitFinished();
+  static bool IsCurrentSongSaveDeferred(const Song &song, const QUrl &current_song_url);
 
  public Q_SLOTS:
   void ReloadSettings();
 
-  void PauseWatcher();
-  void ResumeWatcher();
+  void UpdateWatcherPaused();
 
   void FullScan();
   void StopScan();
@@ -89,10 +99,14 @@ class CollectionLibrary : public QObject {
   void CurrentSongChanged(const Song &song);
   void Stopped();
 
+  // Saves lyrics found automatically for a collection song, to the tags if enabled in the settings, otherwise to the database only.
+  void SaveLyrics(const Song &song, const QString &lyrics, const QString &synced_lyrics);
+
  private Q_SLOTS:
   void ExitReceived();
   void SongsPlaycountChanged(const SongList &songs, const bool save_tags = false);
   void SongsRatingChanged(const SongList &songs, const bool save_tags = false);
+  void SongsLyricsChanged(const SongList &songs, const bool save_lyrics_tags, const bool save_synced_lyrics_tags);
 
  Q_SIGNALS:
   void Error(const QString &error);
@@ -104,6 +118,7 @@ class CollectionLibrary : public QObject {
     Song song;
     bool save_playcount = false;
     bool save_rating = false;
+    bool save_lyrics = false;
   };
 
   const SharedPtr<TaskManager> task_manager_;
@@ -123,10 +138,23 @@ class CollectionLibrary : public QObject {
 
   bool save_playcounts_to_files_;
   bool save_ratings_to_files_;
+  bool save_lyrics_to_files_;
 
   QUrl current_song_url_;
 
   QMap<QUrl, SharedPtr<PendingSongSave>> pending_song_saves_;
+
+  // The sync runs in a concurrent thread using this object, so it is aborted and waited for when exiting.
+  QFuture<void> sync_playcount_and_rating_future_;
+  std::atomic<bool> abort_sync_playcount_and_rating_;
+  // A sync was requested while one was running, which might have read the songs before they changed.
+  bool sync_playcount_and_rating_pending_;
+
+  // Lyrics being saved to the files, the storage type is updated in the backend when they are saved, so the backend exits after them.
+  int lyrics_saves_running_;
+  bool exiting_;
+  bool pending_song_saves_saved_;
+  bool backend_exiting_;
 };
 
 #endif
