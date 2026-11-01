@@ -13,66 +13,96 @@
     </message>
   </context>
   <context>
-    <name>About</name>
+    <name>AboutDialog</name>
     <message>
       <source>About</source>
-      <translation>Névjegy</translation>
+      <translation type="unfinished">About</translation>
     </message>
     <message>
       <source>About Strawberry</source>
-      <translation>A Strawberry névjegye</translation>
+      <translation type="unfinished">About Strawberry</translation>
     </message>
     <message>
       <source>Version %1</source>
-      <translation>Verzió: %1</translation>
+      <translation type="unfinished">Version %1</translation>
     </message>
     <message>
       <source>Strawberry is a music player and music collection organizer.</source>
-      <translation>A Strawberry egy zenelejátszó és zenegyűjtemény-kezelő.</translation>
+      <translation type="unfinished">Strawberry is a music player and music collection organizer.</translation>
     </message>
     <message>
       <source>It is a fork of Clementine released in 2018 aimed at music collectors and audiophiles.</source>
-      <translation>Ez a Clementine egy forkja, amely 2018-ban jelent meg, és a zenegyűjtőket és a vájtfülűeket célozza.</translation>
+      <translation type="unfinished">It is a fork of Clementine released in 2018 aimed at music collectors and audiophiles.</translation>
     </message>
     <message>
       <source>Strawberry is free software released under GPL. The source code is available on %1</source>
-      <translation>A Strawberry GPL licenc alatt közzétett szabad szoftver. A forráskód itt érhető el: %1</translation>
+      <translation type="unfinished">Strawberry is free software released under GPL. The source code is available on %1</translation>
     </message>
     <message>
       <source>You should have received a copy of the GNU General Public License along with this program.  If not, see %1</source>
-      <translation>A programmal meg kellett kapnia a GNU General Public License egy példányát is. Ha nem látogassa meg: %1</translation>
+      <translation type="unfinished">You should have received a copy of the GNU General Public License along with this program.  If not, see %1</translation>
     </message>
     <message>
       <source>If you like Strawberry and can make use of it, consider sponsoring or donating.</source>
-      <translation>Ha tetszik a Strawberry, és ki tudja használni, fontolja meg a szponzorálást vagy az adományozást.</translation>
+      <translation type="unfinished">If you like Strawberry and can make use of it, consider sponsoring or donating.</translation>
     </message>
     <message>
       <source>You can sponsor the author on %1 or %2. You can also make a one-time payment through %3.</source>
-      <translation>A szerzőt itt szponzorálhatja: %1 vagy %2. Egyszeri összeggel ezen az oldalon támogathat: %3.</translation>
+      <translation type="unfinished">You can sponsor the author on %1 or %2. You can also make a one-time payment through %3.</translation>
     </message>
     <message>
       <source>Author and maintainer</source>
-      <translation>Szerző és karbantartó</translation>
+      <translation type="unfinished">Author and maintainer</translation>
     </message>
     <message>
       <source>Contributors</source>
-      <translation>Közreműködők</translation>
+      <translation type="unfinished">Contributors</translation>
     </message>
     <message>
       <source>Clementine authors</source>
-      <translation>A Clementine szerzői</translation>
+      <translation type="unfinished">Clementine authors</translation>
     </message>
     <message>
       <source>Clementine contributors</source>
-      <translation>A Clementine közreműködői</translation>
+      <translation type="unfinished">Clementine contributors</translation>
     </message>
     <message>
       <source>Thanks to</source>
-      <translation>Köszönet a következőknek</translation>
+      <translation type="unfinished">Thanks to</translation>
     </message>
     <message>
       <source>Thanks to all the other Amarok and Clementine contributors.</source>
-      <translation>Köszönet az Amarok és a Clementine közreműködőinek.</translation>
+      <translation type="unfinished">Thanks to all the other Amarok and Clementine contributors.</translation>
+    </message>
+  </context>
+  <context>
+    <name>AcoustidClient</name>
+    <message>
+      <source>Missing AcoustID API key</source>
+      <translation type="unfinished">Missing AcoustID API key</translation>
+    </message>
+  </context>
+  <context>
+    <name>AcoustidSettingsPage</name>
+    <message>
+      <source>AcoustID</source>
+      <translation type="unfinished">AcoustID</translation>
+    </message>
+    <message>
+      <source>AcoustID is used to identify songs by their audio fingerprint when fetching tags.</source>
+      <translation type="unfinished">AcoustID is used to identify songs by their audio fingerprint when fetching tags.</translation>
+    </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
+    </message>
+    <message>
+      <source>Use custom API Key</source>
+      <translation type="unfinished">Use custom API Key</translation>
+    </message>
+    <message>
+      <source>API key</source>
+      <translation type="unfinished">API key</translation>
     </message>
   </context>
   <context>
@@ -299,7 +329,7 @@
     </message>
     <message>
       <source>Album</source>
-      <translation type="unfinished">Album</translation>
+      <translation>Album</translation>
     </message>
     <message>
       <source>Search</source>
@@ -473,7 +503,7 @@
     </message>
     <message>
       <source>40%</source>
-      <translation type="unfinished">40%</translation>
+      <translation>40%</translation>
     </message>
     <message>
       <source>Icon sizes</source>
@@ -521,11 +551,11 @@
     </message>
     <message>
       <source>Window</source>
-      <translation type="unfinished">Window</translation>
+      <translation>Ablak</translation>
     </message>
     <message>
       <source>Window text</source>
-      <translation type="unfinished">Window text</translation>
+      <translation>Ablak szövege</translation>
     </message>
     <message>
       <source>Base</source>
@@ -541,31 +571,31 @@
     </message>
     <message>
       <source>Tooltip text</source>
-      <translation type="unfinished">Tooltip text</translation>
+      <translation>Tooltip Szövege</translation>
     </message>
     <message>
       <source>Placeholder text</source>
-      <translation type="unfinished">Placeholder text</translation>
+      <translation>Helyfoglaló szöveg</translation>
     </message>
     <message>
       <source>Text</source>
-      <translation type="unfinished">Text</translation>
+      <translation>Szöveg</translation>
     </message>
     <message>
       <source>Button</source>
-      <translation type="unfinished">Button</translation>
+      <translation>Gomb</translation>
     </message>
     <message>
       <source>Button text</source>
-      <translation type="unfinished">Button text</translation>
+      <translation>Gomb szövege</translation>
     </message>
     <message>
       <source>Bright text</source>
-      <translation type="unfinished">Bright text</translation>
+      <translation>Világos szöveg</translation>
     </message>
     <message>
       <source>Select color</source>
-      <translation type="unfinished">Select color</translation>
+      <translation>Szín kiválasztása</translation>
     </message>
     <message>
       <source>Select background image</source>
@@ -573,15 +603,15 @@
     </message>
     <message>
       <source>Colors</source>
-      <translation type="unfinished">Colors</translation>
+      <translation>Színek</translation>
     </message>
     <message>
       <source>&amp;Use the system default color set</source>
-      <translation type="unfinished">&amp;Use the system default color set</translation>
+      <translation>&amp;Rendszer alapértelmezett színkészletének használata</translation>
     </message>
     <message>
       <source>Use a custom color set</source>
-      <translation type="unfinished">Use a custom color set</translation>
+      <translation>Egyedi színkészlet használata</translation>
     </message>
     <message>
       <source>Set a custom color set suitable for a dark theme</source>
@@ -589,7 +619,7 @@
     </message>
     <message>
       <source>Dark mode</source>
-      <translation type="unfinished">Dark mode</translation>
+      <translation>Sötét mód</translation>
     </message>
     <message>
       <source>Reset the custom color set to the system default colors</source>
@@ -597,19 +627,19 @@
     </message>
     <message>
       <source>Reset to default</source>
-      <translation type="unfinished">Reset to default</translation>
+      <translation>Visszaállítás alapértelmezettre</translation>
     </message>
     <message>
       <source>You might need to restart Strawberry for this setting to fully apply</source>
-      <translation type="unfinished">You might need to restart Strawberry for this setting to fully apply</translation>
+      <translation>Lehet hogy újra kell indítani a Strawberry-t ennek a beállításnak az életbe léptetéséhez</translation>
     </message>
     <message>
       <source>You need to restart Strawberry for this setting to take affect</source>
-      <translation type="unfinished">You need to restart Strawberry for this setting to take affect</translation>
+      <translation>Újra kell indítani a Strawberry-t ennek a beállításnak az életbe léptetéséhez</translation>
     </message>
     <message>
       <source>System icons</source>
-      <translation type="unfinished">System icons</translation>
+      <translation>Rendszerikonok</translation>
     </message>
     <message>
       <source>Changing colors is only supported with some styles</source>
@@ -617,7 +647,7 @@
     </message>
     <message>
       <source>Dark colors</source>
-      <translation type="unfinished">Dark colors</translation>
+      <translation>Sötét színek</translation>
     </message>
   </context>
   <context>
@@ -652,11 +682,11 @@
     </message>
     <message>
       <source>pcm</source>
-      <translation type="unfinished">pcm</translation>
+      <translation>pcm</translation>
     </message>
     <message>
       <source>Exclusive mode (Experimental)</source>
-      <translation type="unfinished">Exclusive mode (Experimental)</translation>
+      <translation>Exkluzív mód (Kísérleti)</translation>
     </message>
     <message>
       <source>Options</source>
@@ -716,11 +746,11 @@
     </message>
     <message>
       <source>Audio normalization</source>
-      <translation type="unfinished">Audio normalization</translation>
+      <translation>Audió normalizálása</translation>
     </message>
     <message>
       <source>No audio normalization</source>
-      <translation type="unfinished">No audio normalization</translation>
+      <translation>Audió normalizálása kikapcsolva</translation>
     </message>
     <message>
       <source>Replay Gain</source>
@@ -796,7 +826,7 @@
     </message>
     <message>
       <source>You need to restart Strawberry for this setting to take affect</source>
-      <translation type="unfinished">You need to restart Strawberry for this setting to take affect</translation>
+      <translation>Újra kell indítani a Strawberry-t ennek a beállításnak az életbe léptetéséhez</translation>
     </message>
     <message>
       <source>Map the volume slider to a decibel scale so that perceived loudness changes evenly. Each 1% step equals 0.5 dB, 100% is 0 dB and 0% is silence.</source>
@@ -1506,7 +1536,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source> pt</source>
-      <translation type="unfinished"> pt</translation>
+      <translation> pt</translation>
     </message>
     <message>
       <source>Preview</source>
@@ -1578,7 +1608,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>%filename%</source>
-      <translation type="unfinished">%filename%</translation>
+      <translation>%filename%</translation>
     </message>
     <message>
       <source>Add song filename</source>
@@ -1586,7 +1616,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>%url%</source>
-      <translation type="unfinished">%url%</translation>
+      <translation>%url%</translation>
     </message>
     <message>
       <source>Add song URL</source>
@@ -1594,7 +1624,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>%rating%</source>
-      <translation type="unfinished">%rating%</translation>
+      <translation>%rating%</translation>
     </message>
     <message>
       <source>Add song rating</source>
@@ -1919,6 +1949,22 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <source>Embedded album cover art (%1)</source>
       <translation type="unfinished">Embedded album cover art (%1)</translation>
     </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
+    </message>
+    <message>
+      <source>Use custom API credentials</source>
+      <translation type="unfinished">Use custom API credentials</translation>
+    </message>
+    <message>
+      <source>Client ID</source>
+      <translation type="unfinished">Client ID</translation>
+    </message>
+    <message>
+      <source>Client secret</source>
+      <translation type="unfinished">Client secret</translation>
+    </message>
   </context>
   <context>
     <name>CueParser</name>
@@ -2157,6 +2203,13 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>Form</source>
       <translation>Űrlap</translation>
+    </message>
+  </context>
+  <context>
+    <name>DiscogsCoverProvider</name>
+    <message>
+      <source>Missing Discogs client ID and/or client secret</source>
+      <translation type="unfinished">Missing Discogs client ID and/or client secret</translation>
     </message>
   </context>
   <context>
@@ -2402,11 +2455,11 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Yes</source>
-      <translation type="unfinished">Yes</translation>
+      <translation>Igen</translation>
     </message>
     <message>
       <source>No</source>
-      <translation type="unfinished">No</translation>
+      <translation>Nem</translation>
     </message>
     <message>
       <source>None</source>
@@ -2414,7 +2467,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Cover is unset.</source>
-      <translation type="unfinished">Cover is unset.</translation>
+      <translation>Albumkép nincs beállítva.</translation>
     </message>
     <message>
       <source>Cover from embedded image.</source>
@@ -2462,15 +2515,15 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>loading...</source>
-      <translation type="unfinished">loading...</translation>
+      <translation>betöltés...</translation>
     </message>
     <message>
       <source>Not found.</source>
-      <translation type="unfinished">Not found.</translation>
+      <translation>Nem található.</translation>
     </message>
     <message>
       <source>Could not write metadata to %1</source>
-      <translation type="unfinished">Could not write metadata to %1</translation>
+      <translation>Nem írható metaadat ebbe a fájlba: %1</translation>
     </message>
     <message>
       <source>Could not write metadata to %1: %2</source>
@@ -2482,7 +2535,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>2.3</source>
-      <translation type="unfinished">2.3</translation>
+      <translation>'2.3'</translation>
     </message>
     <message>
       <source>2.4</source>
@@ -2569,7 +2622,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Dance</source>
-      <translation type="unfinished">Dance</translation>
+      <translation>Tánc</translation>
     </message>
     <message>
       <source>Full Bass</source>
@@ -2601,15 +2654,15 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Pop</source>
-      <translation type="unfinished">Pop</translation>
+      <translation>Pop</translation>
     </message>
     <message>
       <source>Reggae</source>
-      <translation type="unfinished">Reggae</translation>
+      <translation>Reggae</translation>
     </message>
     <message>
       <source>Rock</source>
-      <translation type="unfinished">Rock</translation>
+      <translation>Rock</translation>
     </message>
     <message>
       <source>Soft</source>
@@ -2617,7 +2670,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Ska</source>
-      <translation type="unfinished">Ska</translation>
+      <translation>Ska</translation>
     </message>
     <message>
       <source>Soft Rock</source>
@@ -2625,7 +2678,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Techno</source>
-      <translation type="unfinished">Techno</translation>
+      <translation>Techno</translation>
     </message>
     <message>
       <source>Zero</source>
@@ -2641,7 +2694,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>You need to restart playback for this setting to take affect.</source>
-      <translation type="unfinished">You need to restart playback for this setting to take affect.</translation>
+      <translation>Újra kell indítani a lejátszást ennek a beállításnak az életbe léptetéséhez.</translation>
     </message>
   </context>
   <context>
@@ -2652,7 +2705,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>%1 dB</source>
-      <translation type="unfinished">%1 dB</translation>
+      <translation>%1 dB</translation>
     </message>
   </context>
   <context>
@@ -2704,15 +2757,15 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Add root directory</source>
-      <translation type="unfinished">Add root directory</translation>
+      <translation>Gyökérkönyvtár hozzáadása</translation>
     </message>
     <message>
       <source>Remove selected root directory</source>
-      <translation type="unfinished">Remove selected root directory</translation>
+      <translation>Kiválasztott gyökérkönyvtár eltávolítása</translation>
     </message>
     <message>
       <source>Toggle between list and tree view</source>
-      <translation type="unfinished">Toggle between list and tree view</translation>
+      <translation>Váltás lista- és fa nézet között</translation>
     </message>
     <message>
       <source>Select folder to add as tree root</source>
@@ -2762,15 +2815,15 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <name>FileViewTree</name>
     <message>
       <source>Append to current playlist</source>
-      <translation type="unfinished">Append to current playlist</translation>
+      <translation>Hozzáfűzés a jelenlegi lejátszólistához</translation>
     </message>
     <message>
       <source>Replace current playlist</source>
-      <translation type="unfinished">Replace current playlist</translation>
+      <translation>Jelenlegi lejátszólista cseréje</translation>
     </message>
     <message>
       <source>Open in new playlist</source>
-      <translation type="unfinished">Open in new playlist</translation>
+      <translation>Megnyitás új lejátszólistában</translation>
     </message>
     <message>
       <source>Copy to collection...</source>
@@ -2798,7 +2851,7 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Files</source>
-      <translation type="unfinished">Files</translation>
+      <translation>Fájlok</translation>
     </message>
   </context>
   <context>
@@ -2828,11 +2881,11 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
     <message>
       <source>Writing database failed: %1</source>
-      <translation type="unfinished">Writing database failed: %1</translation>
+      <translation>Adatbázis írási hiba: %1</translation>
     </message>
     <message>
       <source>Writing database failed.</source>
-      <translation type="unfinished">Writing database failed.</translation>
+      <translation>Adatbázis írási hiba.</translation>
     </message>
   </context>
   <context>
@@ -2844,6 +2897,13 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>An error occurred loading the iTunes database</source>
       <translation>Hiba történt az iTunes adatbázis betöltésekor</translation>
+    </message>
+  </context>
+  <context>
+    <name>GeniusLyricsProvider</name>
+    <message>
+      <source>Missing Genius client ID and/or client secret</source>
+      <translation type="unfinished">Missing Genius client ID and/or client secret</translation>
     </message>
   </context>
   <context>
@@ -3136,6 +3196,10 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
   <context>
     <name>LastFMScrobbler</name>
     <message>
+      <source>Missing Last.fm API key and/or API secret</source>
+      <translation type="unfinished">Missing Last.fm API key and/or API secret</translation>
+    </message>
+    <message>
       <source>%1 Scrobbler Authentication</source>
       <translation type="unfinished">%1 Scrobbler Authentication</translation>
     </message>
@@ -3169,6 +3233,13 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     </message>
   </context>
   <context>
+    <name>LastFmCoverProvider</name>
+    <message>
+      <source>Missing Last.fm API key and/or API secret</source>
+      <translation type="unfinished">Missing Last.fm API key and/or API secret</translation>
+    </message>
+  </context>
+  <context>
     <name>LastPlayedItemDelegate</name>
     <message>
       <source>Never</source>
@@ -3184,6 +3255,10 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
   </context>
   <context>
     <name>ListenBrainzScrobbler</name>
+    <message>
+      <source>Missing ListenBrainz client ID and/or client secret</source>
+      <translation type="unfinished">Missing ListenBrainz client ID and/or client secret</translation>
+    </message>
     <message>
       <source>Unable to scrobble %1 - %2 because of error: %3</source>
       <translation>Hibás scrobble a(z) %1 – %2 számnál: %3</translation>
@@ -3265,6 +3340,22 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>Authentication failed</source>
       <translation>A hitelesítés sikertelen</translation>
+    </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
+    </message>
+    <message>
+      <source>Use custom API credentials</source>
+      <translation type="unfinished">Use custom API credentials</translation>
+    </message>
+    <message>
+      <source>Client ID</source>
+      <translation type="unfinished">Client ID</translation>
+    </message>
+    <message>
+      <source>Client secret</source>
+      <translation type="unfinished">Client secret</translation>
     </message>
   </context>
   <context>
@@ -3797,6 +3888,10 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <source>Close current playlist tab</source>
       <translation type="unfinished">Close current playlist tab</translation>
     </message>
+    <message>
+      <source>Ctrl+B</source>
+      <translation type="unfinished">Ctrl+B</translation>
+    </message>
   </context>
   <context>
     <name>MessageDialog</name>
@@ -3863,6 +3958,13 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>Error connecting MTP device %1: %2</source>
       <translation type="unfinished">Error connecting MTP device %1: %2</translation>
+    </message>
+  </context>
+  <context>
+    <name>MusixmatchLyricsProvider</name>
+    <message>
+      <source>Missing Musixmatch client ID and/or client secret</source>
+      <translation type="unfinished">Missing Musixmatch client ID and/or client secret</translation>
     </message>
   </context>
   <context>
@@ -4171,6 +4273,18 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
   <context>
     <name>OAuthenticator</name>
     <message>
+      <source>Missing client ID</source>
+      <translation type="unfinished">Missing client ID</translation>
+    </message>
+    <message>
+      <source>Missing client secret</source>
+      <translation type="unfinished">Missing client secret</translation>
+    </message>
+    <message>
+      <source>Invalid redirect URL</source>
+      <translation type="unfinished">Invalid redirect URL</translation>
+    </message>
+    <message>
       <source>Authentication</source>
       <translation type="unfinished">Authentication</translation>
     </message>
@@ -4238,6 +4352,14 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <translation>Hangerő %1%</translation>
     </message>
     <message>
+      <source>Muted</source>
+      <translation type="unfinished">Muted</translation>
+    </message>
+    <message>
+      <source>Unmuted</source>
+      <translation type="unfinished">Unmuted</translation>
+    </message>
+    <message>
       <source>Don&apos;t shuffle</source>
       <translation>Nincs keverés</translation>
     </message>
@@ -4278,8 +4400,19 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <translation>Leállítás minden szám után</translation>
     </message>
     <message>
-      <source>Intro tracks</source>
-      <translation>Bevezető számok</translation>
+      <source>Scan tracks</source>
+      <translation type="unfinished">Scan tracks</translation>
+    </message>
+  </context>
+  <context>
+    <name>OpenTidalCoverProvider</name>
+    <message>
+      <source>Missing OpenTidal client ID and/or client secret.</source>
+      <translation type="unfinished">Missing OpenTidal client ID and/or client secret.</translation>
+    </message>
+    <message>
+      <source>Authentication failed: %1</source>
+      <translation type="unfinished">Authentication failed: %1</translation>
     </message>
   </context>
   <context>
@@ -4733,6 +4866,22 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <translation>É&amp;rtékelés zárolása</translation>
     </message>
     <message>
+      <source>Sor&amp;t</source>
+      <translation type="unfinished">Sor&amp;t</translation>
+    </message>
+    <message>
+      <source>&amp;Ascending</source>
+      <translation type="unfinished">&amp;Ascending</translation>
+    </message>
+    <message>
+      <source>&amp;Descending</source>
+      <translation type="unfinished">&amp;Descending</translation>
+    </message>
+    <message>
+      <source>&amp;Clear sorting</source>
+      <translation type="unfinished">&amp;Clear sorting</translation>
+    </message>
+    <message>
       <source>&amp;Align text</source>
       <translation>&amp;Szöveg igazítása</translation>
     </message>
@@ -4940,10 +5089,6 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
       <translation>Leállítás az egyes számok után</translation>
     </message>
     <message>
-      <source>Intro tracks</source>
-      <translation>Bevezető számok</translation>
-    </message>
-    <message>
       <source>Don&apos;t shuffle</source>
       <translation>Nincs keverés</translation>
     </message>
@@ -4962,6 +5107,10 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>Shuffle grouping</source>
       <translation>Gyűjtemény összekeverése</translation>
+    </message>
+    <message>
+      <source>Scan tracks</source>
+      <translation type="unfinished">Scan tracks</translation>
     </message>
   </context>
   <context>
@@ -5053,6 +5202,26 @@ Ha nincs egyezés, akkor a legnagyobb képet veszi a könyvtárból.</translatio
     <message>
       <source>Write metadata when saving playlists</source>
       <translation>Metaadatok írása a lejátszólisták mentésekor</translation>
+    </message>
+    <message>
+      <source>Scan mode</source>
+      <translation type="unfinished">Scan mode</translation>
+    </message>
+    <message>
+      <source>Playing time (seconds)</source>
+      <translation type="unfinished">Playing time (seconds)</translation>
+    </message>
+    <message>
+      <source>The time played before and after the position time selected in seconds (0 for playing the complete track)</source>
+      <translation type="unfinished">The time played before and after the position time selected in seconds (0 for playing the complete track)</translation>
+    </message>
+    <message>
+      <source>Interest position (percent of track length)</source>
+      <translation type="unfinished">Interest position (percent of track length)</translation>
+    </message>
+    <message>
+      <source>The position time reference selected in percent of the track length</source>
+      <translation type="unfinished">The position time reference selected in percent of the track length</translation>
     </message>
   </context>
   <context>
@@ -5738,10 +5907,6 @@ Biztos, hogy folytatja?</translation>
       <translation>Engedélyezés</translation>
     </message>
     <message>
-      <source>Authentication</source>
-      <translation>Hitelesítés</translation>
-    </message>
-    <message>
       <source>App ID</source>
       <translation>Alkalmazás azonosító</translation>
     </message>
@@ -5790,16 +5955,16 @@ Biztos, hogy folytatja?</translation>
       <translation>A konfiguráció hiányos</translation>
     </message>
     <message>
-      <source>Missing app id. Please fetch credentials first.</source>
-      <translation type="unfinished">Missing app id. Please fetch credentials first.</translation>
+      <source>Missing app id. Please fetch API credentials first.</source>
+      <translation type="unfinished">Missing app id. Please fetch API credentials first.</translation>
     </message>
     <message>
-      <source>Missing app secret. Please fetch credentials first.</source>
-      <translation type="unfinished">Missing app secret. Please fetch credentials first.</translation>
+      <source>Missing app secret. Please fetch API credentials first.</source>
+      <translation type="unfinished">Missing app secret. Please fetch API credentials first.</translation>
     </message>
     <message>
-      <source>Missing private key. Please fetch credentials first.</source>
-      <translation type="unfinished">Missing private key. Please fetch credentials first.</translation>
+      <source>Missing private key. Please fetch API credentials first.</source>
+      <translation type="unfinished">Missing private key. Please fetch API credentials first.</translation>
     </message>
     <message>
       <source>Authentication failed</source>
@@ -5810,20 +5975,16 @@ Biztos, hogy folytatja?</translation>
       <translation type="unfinished">Fetching...</translation>
     </message>
     <message>
-      <source>Credentials fetched</source>
-      <translation type="unfinished">Credentials fetched</translation>
+      <source>API credentials fetched</source>
+      <translation type="unfinished">API credentials fetched</translation>
     </message>
     <message>
-      <source>Credentials have been successfully fetched. Click Login to authenticate via your browser.</source>
-      <translation type="unfinished">Credentials have been successfully fetched. Click Login to authenticate via your browser.</translation>
+      <source>API credentials have been successfully fetched. Click Login to authenticate via your browser.</source>
+      <translation type="unfinished">API credentials have been successfully fetched. Click Login to authenticate via your browser.</translation>
     </message>
     <message>
       <source>Credential fetch failed</source>
       <translation type="unfinished">Credential fetch failed</translation>
-    </message>
-    <message>
-      <source>Fetch Credentials</source>
-      <translation type="unfinished">Fetch Credentials</translation>
     </message>
     <message>
       <source>Remove (Remastered), etc from song titles</source>
@@ -5836,6 +5997,14 @@ Biztos, hogy folytatja?</translation>
     <message>
       <source>Automatically fetch app ID, app secret and private key from Qobuz web player</source>
       <translation type="unfinished">Automatically fetch app ID, app secret and private key from Qobuz web player</translation>
+    </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
+    </message>
+    <message>
+      <source>Fetch API Credentials</source>
+      <translation type="unfinished">Fetch API Credentials</translation>
     </message>
   </context>
   <context>
@@ -6364,6 +6533,18 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
       <source>Spotify</source>
       <translation type="unfinished">Spotify</translation>
     </message>
+    <message>
+      <source>Use custom API credentials</source>
+      <translation type="unfinished">Use custom API credentials</translation>
+    </message>
+    <message>
+      <source>Client ID:</source>
+      <translation type="unfinished">Client ID:</translation>
+    </message>
+    <message>
+      <source>Client secret:</source>
+      <translation type="unfinished">Client secret:</translation>
+    </message>
   </context>
   <context>
     <name>SettingsDialog</name>
@@ -6792,6 +6973,10 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
   <context>
     <name>SpotifyService</name>
     <message>
+      <source>Missing Spotify client ID and/or client secret</source>
+      <translation type="unfinished">Missing Spotify client ID and/or client secret</translation>
+    </message>
+    <message>
       <source>Not authenticated with Spotify.</source>
       <translation type="unfinished">Not authenticated with Spotify.</translation>
     </message>
@@ -6805,10 +6990,6 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
     <message>
       <source>Enable</source>
       <translation>Engedélyezés</translation>
-    </message>
-    <message>
-      <source>Basic authentication</source>
-      <translation type="unfinished">Basic authentication</translation>
     </message>
     <message>
       <source>Authenticate</source>
@@ -6857,6 +7038,26 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
     <message>
       <source>Remove (Remastered), etc from song titles</source>
       <translation type="unfinished">Remove (Remastered), etc from song titles</translation>
+    </message>
+    <message>
+      <source>Authentication</source>
+      <translation type="unfinished">Authentication</translation>
+    </message>
+    <message>
+      <source>Use custom API credentials</source>
+      <translation type="unfinished">Use custom API credentials</translation>
+    </message>
+    <message>
+      <source>Client ID</source>
+      <translation type="unfinished">Client ID</translation>
+    </message>
+    <message>
+      <source>Client secret</source>
+      <translation type="unfinished">Client secret</translation>
+    </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
     </message>
   </context>
   <context>
@@ -7292,14 +7493,6 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
       <translation>Engedélyezés</translation>
     </message>
     <message>
-      <source>Tidal support is not official and requires a API token from a registered application to work. We can&apos;t help you getting these.</source>
-      <translation>A Tidal támogatása nem hivatalos, és ahhoz, hogy működjön, regisztrált alkalmazás API-token szükséges. Nem tudunk segíteni ennek a beszerzésében.</translation>
-    </message>
-    <message>
-      <source>Authentication</source>
-      <translation>Hitelesítés</translation>
-    </message>
-    <message>
       <source>Client ID</source>
       <translation>Kliens azonosító</translation>
     </message>
@@ -7371,6 +7564,14 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
       <source>Remove (Remastered), etc from song titles</source>
       <translation type="unfinished">Remove (Remastered), etc from song titles</translation>
     </message>
+    <message>
+      <source>Use custom client ID</source>
+      <translation type="unfinished">Use custom client ID</translation>
+    </message>
+    <message>
+      <source>API Credentials</source>
+      <translation type="unfinished">API Credentials</translation>
+    </message>
   </context>
   <context>
     <name>TidalStreamURLRequest</name>
@@ -7383,12 +7584,12 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
       <translation>Megszakítva.</translation>
     </message>
     <message>
-      <source>Received URL with %1 encrypted stream from Tidal. Strawberry does not currently support encrypted streams.</source>
-      <translation>%1 titkosított közvetítést tartalmazó webcím fogadva a Tidaltól. A Strawberry jelenleg nem támogatja a titkosított közvetítéseket.</translation>
+      <source>Received a %1 encrypted stream from Tidal, which Strawberry does not support. Whether Tidal delivers encrypted streams depends on the client ID in use. Try changing the Client ID in the Tidal settings</source>
+      <translation type="unfinished">Received a %1 encrypted stream from Tidal, which Strawberry does not support. Whether Tidal delivers encrypted streams depends on the client ID in use. Try changing the Client ID in the Tidal settings</translation>
     </message>
     <message>
-      <source>Received URL with encrypted stream from Tidal. Strawberry does not currently support encrypted streams.</source>
-      <translation>Titkosított közvetítést tartalmazó webcím fogadva a Tidaltól. A Strawberry jelenleg nem támogatja a titkosított közvetítéseket.</translation>
+      <source>Received an encrypted stream from Tidal, which Strawberry does not support. Whether Tidal delivers encrypted streams depends on the client ID in use. Try changing the Client ID in the Tidal settings</source>
+      <translation type="unfinished">Received an encrypted stream from Tidal, which Strawberry does not support. Whether Tidal delivers encrypted streams depends on the client ID in use. Try changing the Client ID in the Tidal settings</translation>
     </message>
   </context>
   <context>
@@ -8009,6 +8210,13 @@ másodpercnél hosszabbak, illetve legalább a felükig vagy 4 percig vannak lej
     <message>
       <source>Password</source>
       <translation>Jelszó</translation>
+    </message>
+  </context>
+  <context>
+    <name>VolumeSlider</name>
+    <message>
+      <source>Muted</source>
+      <translation type="unfinished">Muted</translation>
     </message>
   </context>
   <context>

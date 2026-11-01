@@ -23,8 +23,6 @@
 
 #include <memory>
 
-#include <QtConcurrentRun>
-#include <QFuture>
 #include <QUuid>
 #include <QColor>
 
@@ -32,6 +30,7 @@
 #include "core/song.h"
 
 #include "playlistitem.h"
+#include "playlistitemsavedata.h"
 #include "songplaylistitem.h"
 #include "collection/collectionplaylistitem.h"
 #include "streaming/streamserviceplaylistitem.h"
@@ -50,9 +49,11 @@ PlaylistItemPtr PlaylistItem::NewFromSource(const Song::Source source, const QUu
     case Song::Source::Collection:
       return make_shared<CollectionPlaylistItem>(source, uuid);
     case Song::Source::Subsonic:
+    case Song::Source::Plex:
     case Song::Source::Tidal:
     case Song::Source::Spotify:
     case Song::Source::Qobuz:
+    case Song::Source::Jellyfin:
       return make_shared<StreamServicePlaylistItem>(source, uuid);
     case Song::Source::Stream:
     case Song::Source::RadioParadise:
@@ -76,9 +77,11 @@ PlaylistItemPtr PlaylistItem::NewFromSong(const Song &song, const bool signal) {
     case Song::Source::Collection:
       return make_shared<CollectionPlaylistItem>(song, signal);
     case Song::Source::Subsonic:
+    case Song::Source::Plex:
     case Song::Source::Tidal:
     case Song::Source::Spotify:
     case Song::Source::Qobuz:
+    case Song::Source::Jellyfin:
       return make_shared<StreamServicePlaylistItem>(song, signal);
     case Song::Source::Stream:
     case Song::Source::RadioParadise:
@@ -94,6 +97,10 @@ PlaylistItemPtr PlaylistItem::NewFromSong(const Song &song, const bool signal) {
 
   return make_shared<SongPlaylistItem>(song, signal);
 
+}
+
+PlaylistItemPtr PlaylistItem::Copy() const {
+  return NewFromSong(OriginalMetadata());
 }
 
 void PlaylistItem::SetStreamMetadata(const Song &song) {
@@ -118,22 +125,16 @@ void PlaylistItem::ClearStreamMetadata() {
   stream_song_ = Song();
 }
 
-void PlaylistItem::BindToQuery(SqlQuery *query) const {
+PlaylistItemSaveData PlaylistItem::CreateSaveData() const {
 
-  query->BindValue(u":type"_s, static_cast<int>(source_));
-  query->BindValue(u":uuid"_s, uuid_.toString(QUuid::WithoutBraces));
-  query->BindValue(u":collection_id"_s, DatabaseValue(DatabaseColumn::CollectionId));
+  PlaylistItemSaveData save_data;
+  save_data.source = source_;
+  save_data.uuid = uuid_;
+  save_data.collection_id = DatabaseValue(DatabaseColumn::CollectionId);
+  save_data.song = DatabaseSongMetadata();
 
-  DatabaseSongMetadata().BindToQuery(query);
+  return save_data;
 
-}
-
-static Song ReloadPlaylistItem(PlaylistItemPtr item, SharedPtr<TagReaderClient> tagreader_client) {
-  return item->Reload(tagreader_client);
-}
-
-QFuture<Song> PlaylistItem::BackgroundReload(const SharedPtr<TagReaderClient> tagreader_client) {
-  return QtConcurrent::run(ReloadPlaylistItem, shared_from_this(), tagreader_client);
 }
 
 void PlaylistItem::SetBackgroundColor(short priority, const QColor &color) {

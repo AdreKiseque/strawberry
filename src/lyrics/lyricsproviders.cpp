@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include <utility>
-#include <memory>
 
 #include <QMutex>
 #include <QList>
@@ -31,7 +30,6 @@
 
 #include "core/logging.h"
 #include "core/settings.h"
-#include "core/networkaccessmanager.h"
 
 #include "lyricsprovider.h"
 #include "lyricsproviders.h"
@@ -40,9 +38,7 @@
 
 int LyricsProviders::NextOrderId = 0;
 
-using std::make_shared;
-
-LyricsProviders::LyricsProviders(QObject *parent) : QObject(parent), network_(make_shared<NetworkAccessManager>()), next_id_(0) {
+LyricsProviders::LyricsProviders(QObject *parent) : QObject(parent), next_id_(0) {
 
   setObjectName(QLatin1String(QObject::metaObject()->className()));
 
@@ -61,6 +57,7 @@ void LyricsProviders::ReloadSettings() {
   QMap<int, QString> all_providers;
   QList<LyricsProvider*> old_providers = lyrics_providers_.keys();
   for (LyricsProvider *provider : std::as_const(old_providers)) {
+    provider->ReloadSettings();
     if (!provider->is_enabled()) continue;
     all_providers.insert(provider->order(), provider->name());
   }

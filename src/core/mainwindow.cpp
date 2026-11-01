@@ -22,7 +22,10 @@
 #include "config.h"
 #include "version.h"
 
+#include <cstdlib>
+#include <cstdio>
 #include <cmath>
+
 #include <algorithm>
 #include <utility>
 #include <functional>
@@ -183,6 +186,12 @@
 #  include "qobuz/qobuzservice.h"
 #  include "qobuz/qobuzmetadatarequest.h"
 #  include "constants/qobuzsettings.h"
+#endif
+#ifdef HAVE_PLEX
+#  include "constants/plexsettings.h"
+#endif
+#ifdef HAVE_JELLYFIN
+#  include "constants/jellyfinsettings.h"
 #endif
 
 #include "streaming/streamingservices.h"
@@ -377,6 +386,12 @@ MainWindow::MainWindow(Application *app,
 #ifdef HAVE_QOBUZ
       qobuz_view_(new StreamingTabsView(app->streaming_services()->ServiceBySource(Song::Source::Qobuz), app->albumcover_loader(), QLatin1String(QobuzSettings::kSettingsGroup), this)),
 #endif
+#ifdef HAVE_PLEX
+      plex_view_(new StreamingSongsView(app->streaming_services()->ServiceBySource(Song::Source::Plex), QLatin1String(PlexSettings::kSettingsGroup), this)),
+#endif
+#ifdef HAVE_JELLYFIN
+      jellyfin_view_(new StreamingTabsView(app->streaming_services()->ServiceBySource(Song::Source::Jellyfin), app->albumcover_loader(), QLatin1String(JellyfinSettings::kSettingsGroup), this)),
+#endif
       radio_view_(new RadioViewContainer(this)),
       collection_show_all_(nullptr),
       collection_show_duplicates_(nullptr),
@@ -417,6 +432,7 @@ MainWindow::MainWindow(Application *app,
       was_minimized_(false),
       exit_(false),
       exit_count_(0),
+      exit_started_(false),
       playlists_loaded_(false),
       delete_files_(false) {
 
@@ -470,6 +486,12 @@ MainWindow::MainWindow(Application *app,
 #ifdef HAVE_QOBUZ
   ui_->tabs->AddTab(qobuz_view_, u"qobuz"_s, IconLoader::Load(u"qobuz"_s, true, 0, 32), tr("Qobuz"));
 #endif
+#ifdef HAVE_PLEX
+  ui_->tabs->AddTab(plex_view_, u"plex"_s, IconLoader::Load(u"plex"_s, true, 0, 32), tr("Plex"));
+#endif
+#ifdef HAVE_JELLYFIN
+  ui_->tabs->AddTab(jellyfin_view_, u"jellyfin"_s, IconLoader::Load(u"jellyfin"_s, true, 0, 32), tr("Jellyfin"));
+#endif
 
   // Add the playing widget to the fancy tab widget
   ui_->tabs->AddBottomWidget(ui_->widget_playing);
@@ -493,7 +515,7 @@ MainWindow::MainWindow(Application *app,
 
   const uint volume = app_->player()->GetVolume();
   ui_->volume->SetValue(volume);
-  VolumeChanged(volume);
+  MuteChanged(app_->player()->is_muted());
 
   QObject::connect(ui_->playlist, &PlaylistContainer::ViewSelectionModelChanged, this, &MainWindow::PlaylistViewSelectionModelChanged);
 
@@ -688,7 +710,7 @@ MainWindow::MainWindow(Application *app,
   QObject::connect(&*app_->player(), &Player::Stopped, this, &MainWindow::MediaStopped);
   QObject::connect(&*app_->player(), &Player::Seeked, this, &MainWindow::Seeked);
   QObject::connect(&*app_->player(), &Player::TrackSkipped, this, &MainWindow::TrackSkipped);
-  QObject::connect(&*app_->player(), &Player::VolumeChanged, this, &MainWindow::VolumeChanged);
+  QObject::connect(&*app_->player(), &Player::MuteChanged, this, &MainWindow::MuteChanged);
 
   QObject::connect(&*app_->player(), &Player::Paused, ui_->playlist, &PlaylistContainer::ActivePaused);
   QObject::connect(&*app_->player(), &Player::Playing, ui_->playlist, &PlaylistContainer::ActivePlaying);
@@ -701,6 +723,7 @@ MainWindow::MainWindow(Application *app,
   QObject::connect(&*app_->player(), &Player::Stopped, osd_, &OSDBase::Stopped);
   QObject::connect(&*app_->player(), &Player::PlaylistFinished, osd_, &OSDBase::PlaylistFinished);
   QObject::connect(&*app_->player(), &Player::VolumeChanged, osd_, &OSDBase::VolumeChanged);
+  QObject::connect(&*app_->player(), &Player::MuteChanged, osd_, &OSDBase::MuteChanged);
   QObject::connect(&*app_->player(), &Player::VolumeChanged, ui_->volume, &VolumeSlider::SetValue);
   QObject::connect(&*app_->player(), &Player::ForceShowOSD, this, &MainWindow::ForceShowOSD);
 
@@ -843,6 +866,21 @@ MainWindow::MainWindow(Application *app,
   if (SpotifyServicePtr spotifyservice = app_->streaming_services()->Service<SpotifyService>()) {
     QObject::connect(&*spotifyservice, &SpotifyService::UpdateSpotifyAccessToken, &*app_->player()->engine(), &EngineBase::UpdateSpotifyAccessToken);
   }
+#endif
+
+#ifdef HAVE_PLEX
+  QObject::connect(plex_view_, &StreamingSongsView::OpenSettingsDialog, this, &MainWindow::OpenServiceSettingsDialog);
+  QObject::connect(plex_view_->view(), &StreamingCollectionView::AddToPlaylistSignal, this, &MainWindow::AddToPlaylist);
+#endif
+
+#ifdef HAVE_JELLYFIN
+  QObject::connect(jellyfin_view_, &StreamingTabsView::OpenSettingsDialog, this, &MainWindow::OpenServiceSettingsDialog);
+  QObject::connect(&*app_->streaming_services()->ServiceBySource(Song::Source::Jellyfin), &StreamingService::ShowErrorDialog, this, &MainWindow::ShowErrorDialog);
+  QObject::connect(jellyfin_view_->artists_collection_view(), &StreamingCollectionView::AddToPlaylistSignal, this, &MainWindow::AddToPlaylist);
+  QObject::connect(jellyfin_view_->albums_collection_view(), &StreamingCollectionView::AddToPlaylistSignal, this, &MainWindow::AddToPlaylist);
+  QObject::connect(jellyfin_view_->songs_collection_view(), &StreamingCollectionView::AddToPlaylistSignal, this, &MainWindow::AddToPlaylist);
+  QObject::connect(jellyfin_view_->search_view(), &StreamingSearchView::OpenSettingsDialog, this, &MainWindow::OpenServiceSettingsDialog);
+  QObject::connect(jellyfin_view_->search_view(), &StreamingSearchView::AddToPlaylist, this, &MainWindow::AddToPlaylist);
 #endif
 
   QObject::connect(radio_view_, &RadioViewContainer::Refresh, &*app_->radio_services(), &RadioServices::RefreshChannels);
@@ -1144,7 +1182,7 @@ MainWindow::MainWindow(Application *app,
   CommandlineOptionsReceived(options);
 
   if (app_->scrobbler()->enabled() && !app_->scrobbler()->offline()) {
-    app_->scrobbler()->Submit();
+    app_->scrobbler()->Start();
   }
 
 #ifdef HAVE_SPARKLE
@@ -1335,6 +1373,30 @@ void MainWindow::ReloadSettings() {
   }
 #endif
 
+#ifdef HAVE_PLEX
+  s.beginGroup(PlexSettings::kSettingsGroup);
+  bool enable_plex = s.value(PlexSettings::kEnabled, PlexSettings::kDefaultEnabled).toBool();
+  s.endGroup();
+  if (enable_plex) {
+    ui_->tabs->EnableTab(plex_view_);
+  }
+  else {
+    ui_->tabs->DisableTab(plex_view_);
+  }
+#endif
+
+#ifdef HAVE_JELLYFIN
+  s.beginGroup(JellyfinSettings::kSettingsGroup);
+  bool enable_jellyfin = s.value(JellyfinSettings::kEnabled, JellyfinSettings::kDefaultEnabled).toBool();
+  s.endGroup();
+  if (enable_jellyfin) {
+    ui_->tabs->EnableTab(jellyfin_view_);
+  }
+  else {
+    ui_->tabs->DisableTab(jellyfin_view_);
+  }
+#endif
+
   ui_->tabs->ReloadSettings();
 
 }
@@ -1349,6 +1411,7 @@ void MainWindow::ReloadAllSettings() {
   collection_view_->ReloadSettings();
   ui_->playlist->view()->ReloadSettings();
   app_->playlist_manager()->playlist_container()->ReloadSettings();
+  app_->playlist_manager()->sequence()->ReloadSettings();
   app_->current_albumcover_loader()->ReloadSettingsAsync();
   album_cover_choice_controller_->ReloadSettings();
   context_view_->ReloadSettings();
@@ -1358,6 +1421,7 @@ void MainWindow::ReloadAllSettings() {
   smartplaylists_view_->ReloadSettings();
   radio_view_->ReloadSettings();
   app_->streaming_services()->ReloadSettings();
+  app_->scrobbler()->ReloadSettings();
   app_->radio_services()->ReloadSettings();
   app_->cover_providers()->ReloadSettings();
   app_->lyrics_providers()->ReloadSettings();
@@ -1389,6 +1453,13 @@ void MainWindow::ReloadAllSettings() {
 #ifdef HAVE_QOBUZ
   qobuz_view_->ReloadSettings();
   qobuz_view_->search_view()->ReloadSettings();
+#endif
+#ifdef HAVE_PLEX
+  plex_view_->ReloadSettings();
+#endif
+#ifdef HAVE_JELLYFIN
+  jellyfin_view_->ReloadSettings();
+  jellyfin_view_->search_view()->ReloadSettings();
 #endif
 #ifdef HAVE_DISCORD_RPC
   discord_rich_presence_->ReloadSettings();
@@ -1429,8 +1500,17 @@ void MainWindow::Exit() {
   settings_dialog_.reset();
 
   if (exit_count_ > 1) {
-    exit_ = true;
-    QCoreApplication::quit();
+    // Asked to quit again. Never quit the event loop directly here: exec() would return with the subsystems still running in their own threads, and Application's destructor would then delete them from this thread.
+    if (exit_started_) {
+      // The shutdown is already running and is waiting for a subsystem that has not reported back, so there is nothing left to hurry along.
+      // Leave the process without unwinding rather than tearing down objects the subsystem threads are still using.
+      qLog(Warning) << "Exit requested again while shutting down, exiting immediately.";
+      std::fflush(nullptr);
+      std::_Exit(EXIT_SUCCESS);
+    }
+    // Still waiting for a fadeout to finish, so skip the rest of it and shut down now.
+    QObject::disconnect(&*app_->player()->engine(), &EngineBase::Finished, this, &MainWindow::DoExit);
+    DoExit();
   }
   else {
     if (app_->player()->engine()->is_fadeout_enabled()) {
@@ -1458,6 +1538,9 @@ void MainWindow::Exit() {
 }
 
 void MainWindow::DoExit() {
+
+  if (exit_started_) return;
+  exit_started_ = true;
 
   QObject::connect(app_, &Application::ExitFinished, this, &MainWindow::ExitFinished);
   app_->Exit();
@@ -1562,7 +1645,7 @@ void MainWindow::MediaPlaying() {
   bool enable_play_pause(false);
   bool can_seek(false);
 
-  PlaylistItemPtr item(app_->player()->GetCurrentItem());
+  PlaylistItemPtr item = app_->player()->GetCurrentItem();
   if (item) {
     enable_play_pause = !(item->options() & PlaylistItem::Option::PauseDisabled);
     can_seek = !(item->options() & PlaylistItem::Option::SeekDisabled);
@@ -1595,9 +1678,12 @@ void MainWindow::SendNowPlaying() {
 
 }
 
-void MainWindow::VolumeChanged(const uint volume) {
-  ui_->action_mute->setChecked(volume == 0);
-  systemtrayicon_->MuteButtonStateChanged(volume == 0);
+void MainWindow::MuteChanged(const bool mute) {
+
+  ui_->action_mute->setChecked(mute);
+  systemtrayicon_->MuteButtonStateChanged(mute);
+  ui_->volume->SetMuted(mute);
+
 }
 
 void MainWindow::SongChanged(const Song &song) {
@@ -1863,12 +1949,18 @@ void MainWindow::Seeked(const qint64 microseconds) {
 
 void MainWindow::UpdateTrackPosition() {
 
-  PlaylistItemPtr item(app_->player()->GetCurrentItem());
+  PlaylistItemPtr item = app_->player()->GetCurrentItem();
   if (!item) return;
 
   const qint64 length = (item->EffectiveMetadata().length_nanosec() / kNsecPerSec);
-  if (length <= 0) return;
   const int position = std::floor(static_cast<float>(app_->player()->engine()->position_nanosec()) / static_cast<float>(kNsecPerSec) + 0.5);
+  if (length <= 0) {
+    // Streams without a length, for example radio, the player still needs to know that it's playing.
+    if (app_->player()->GetState() == EngineBase::State::Playing) {
+      app_->player()->TrackPositionChanged(position);
+    }
+    return;
+  }
 
   // Update the tray icon every 10 seconds
   if (position % 10 == 0) systemtrayicon_->SetProgress(static_cast<int>(static_cast<double>(position) / static_cast<double>(length) * 100.0));
@@ -1889,6 +1981,11 @@ void MainWindow::UpdateTrackPosition() {
         playlist->set_scrobbled(true);
       }
     }
+  }
+
+  // At the end of the time of the track, move to the next track
+  if (app_->player()->GetState() == EngineBase::State::Playing) {
+    app_->player()->TrackPositionChanged(position);
   }
 
 }
@@ -1999,7 +2096,8 @@ void MainWindow::AddToPlaylistFromAction(QAction *action) {
     if (!source_index.isValid()) continue;
     PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
-    items << item;
+    // Insert copies, so the items are not shared between the playlists, or between rows when adding to the current playlist.
+    items << item->Copy();
     songs << item->EffectiveMetadata();
   }
 
@@ -2282,14 +2380,14 @@ void MainWindow::RescanSongs() {
   for (const QModelIndex &proxy_index : proxy_indexes) {
     const QModelIndex source_index = app_->playlist_manager()->current()->filter()->mapToSource(proxy_index);
     if (!source_index.isValid()) continue;
-    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(source_index.row()));
+    PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
     if (item->IsLocalCollectionItem()) {
       songs << item->EffectiveMetadata();
     }
     else if (item->EffectiveMetadata().source() == Song::Source::LocalFile) {
       QPersistentModelIndex persistent_index = QPersistentModelIndex(source_index);
-      app_->playlist_manager()->current()->ItemReload(persistent_index, false);
+      app_->playlist_manager()->current()->ReloadItem(persistent_index, item);
     }
   }
 
@@ -2308,7 +2406,7 @@ void MainWindow::EditTracks() {
   for (const QModelIndex &proxy_index : proxy_indexes) {
     const QModelIndex source_index = app_->playlist_manager()->current()->filter()->mapToSource(proxy_index);
     if (!source_index.isValid()) continue;
-    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(source_index.row()));
+    PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
     Song song = item->OriginalMetadata();
     if (song.IsEditable()) {
@@ -2334,22 +2432,33 @@ void MainWindow::EditTagDialogAccepted() {
     return;
   }
 
+  Playlist *playlist = app_->playlist_manager()->current();
+  if (!playlist) {
+    return;
+  }
+
+  QList<int> rows_to_reload;
   for (int i = 0; i < items.count(); ++i) {
-    PlaylistItemPtr item = items[i];
-    const Song &updated_song = songs[i];
-    // For stream tracks, apply the metadata directly since there's no file to reload from
+    PlaylistItemPtr item = items.at(i);
+    const Song &updated_song = songs.at(i);
+    // For stream tracks, apply the metadata directly since there's no file to reload from.
     if (updated_song.is_stream_service()) {
-      item->SetOriginalMetadata(updated_song);
+      playlist->UpdateItemMetadata(item, updated_song, false);
+      continue;
     }
-    else {
-      item->Reload(app_->tagreader_client());
+    // The item's row may have shifted since the dialog was opened, and reloading below needs a row rather than just the item.
+    const int row = playlist->row_of(item);
+    if (row != -1) {
+      rows_to_reload << row;
     }
   }
 
-  // FIXME: This is really lame but we don't know what rows have changed.
-  ui_->playlist->view()->update();
+  // Reload the just-written files from disk (to pick up any normalization the tag writer applied) and refresh only the rows that changed, instead of repainting the whole view.
+  if (!rows_to_reload.isEmpty()) {
+    playlist->ReloadItems(rows_to_reload);
+  }
 
-  app_->playlist_manager()->current()->ScheduleSaveAsync();
+  playlist->ScheduleSave();
 
 }
 
@@ -2784,7 +2893,7 @@ void MainWindow::AddFilesToTranscoder() {
   for (const QModelIndex &proxy_index : proxy_indexes) {
     const QModelIndex source_index = app_->playlist_manager()->current()->filter()->mapToSource(proxy_index);
     if (!source_index.isValid()) continue;
-    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(source_index.row()));
+    PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
     Song song = item->OriginalMetadata();
     if (!song.is_valid() || !song.url().isLocalFile()) continue;
@@ -2820,6 +2929,12 @@ void MainWindow::OpenServiceSettingsDialog(const Song::Source source) {
       break;
     case Song::Source::Spotify:
       settings_dialog_->OpenAtPage(SettingsDialog::Page::Spotify);
+      break;
+    case Song::Source::Plex:
+      settings_dialog_->OpenAtPage(SettingsDialog::Page::Plex);
+      break;
+    case Song::Source::Jellyfin:
+      settings_dialog_->OpenAtPage(SettingsDialog::Page::Jellyfin);
       break;
     default:
       break;
@@ -3063,7 +3178,7 @@ void MainWindow::ShowEqualizer() {
 SettingsDialog *MainWindow::CreateSettingsDialog() {
 
   SettingsDialog *settings_dialog = new SettingsDialog(app_->player(),
-                                                       app_->device_finders(),
+                                                       app_->audio_device_listers(),
                                                        app_->collection(),
                                                        app_->cover_providers(),
                                                        app_->lyrics_providers(),
@@ -3224,7 +3339,7 @@ void MainWindow::AutoCompleteTags() {
   for (const QModelIndex &proxy_index : proxy_indexes) {
     const QModelIndex source_index = app_->playlist_manager()->current()->filter()->mapToSource(proxy_index);
     if (!source_index.isValid()) continue;
-    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(source_index.row()));
+    PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
     Song song = item->OriginalMetadata();
     if (song.IsEditable()) {
@@ -3246,17 +3361,22 @@ void MainWindow::AutoCompleteTags() {
 
 void MainWindow::AutoCompleteTagsAccepted() {
 
-  for (int i = 0; i < autocomplete_tag_items_.count(); ++i) {
-    PlaylistItemPtr item = autocomplete_tag_items_.at(i);
-    const Song reloaded_song = item->Reload(app_->tagreader_client());
-    if (reloaded_song.is_valid()) {
-      item->SetOriginalMetadata(reloaded_song);
+  Playlist *playlist = app_->playlist_manager()->current();
+  if (playlist) {
+    QList<int> rows_to_reload;
+    for (int i = 0; i < autocomplete_tag_items_.count(); i++) {
+      const PlaylistItemPtr item = autocomplete_tag_items_.at(i);
+      const int row = playlist->row_of(item);
+      if (row != -1) {
+        rows_to_reload << row;
+      }
+    }
+    if (!rows_to_reload.isEmpty()) {
+      playlist->ReloadItems(rows_to_reload);
     }
   }
-  autocomplete_tag_items_.clear();
 
-  // This is really lame but we don't know what rows have changed
-  ui_->playlist->view()->update();
+  autocomplete_tag_items_.clear();
 
 }
 
@@ -3509,6 +3629,16 @@ void MainWindow::FocusSearchField() {
     qobuz_view_->FocusSearchField();
   }
 #endif
+#ifdef HAVE_PLEX
+  else if (ui_->tabs->currentIndex() == ui_->tabs->IndexOfTab(plex_view_) && !plex_view_->SearchFieldHasFocus()) {
+    plex_view_->FocusSearchField();
+  }
+#endif
+#ifdef HAVE_JELLYFIN
+  else if (ui_->tabs->currentIndex() == ui_->tabs->IndexOfTab(jellyfin_view_) && !jellyfin_view_->SearchFieldHasFocus()) {
+    jellyfin_view_->FocusSearchField();
+  }
+#endif
   else if (!ui_->playlist->SearchFieldHasFocus()) {
     ui_->playlist->FocusSearchField();
   }
@@ -3521,7 +3651,7 @@ void MainWindow::FetchStreamingMetadata() {
   for (const QModelIndex &proxy_index : proxy_indexes) {
     const QModelIndex source_index = app_->playlist_manager()->current()->filter()->mapToSource(proxy_index);
     if (!source_index.isValid()) continue;
-    PlaylistItemPtr item(app_->playlist_manager()->current()->item_at(source_index.row()));
+    PlaylistItemPtr item = app_->playlist_manager()->current()->item_at(source_index.row());
     if (!item) continue;
 
     const Song &song = item->EffectiveMetadata();
@@ -3602,8 +3732,7 @@ void MainWindow::ProcessMetadataQueue() {
             if (fetched_song.year() > 0) updated_song.set_year(fetched_song.year());
             if (fetched_song.length_nanosec() > 0) updated_song.set_length_nanosec(fetched_song.length_nanosec());
             if (fetched_song.art_automatic().isValid()) updated_song.set_art_automatic(fetched_song.art_automatic());
-            playlist_item->SetOriginalMetadata(updated_song);
-            app_->playlist_manager()->current()->ItemReload(metadata_queue_entry.persistent_index, false);
+            app_->playlist_manager()->current()->UpdateItemMetadata(metadata_queue_entry.persistent_index.row(), playlist_item, updated_song, false);
           }
         }
         request->deleteLater();
@@ -3652,8 +3781,7 @@ void MainWindow::ProcessMetadataQueue() {
             if (fetched_song.year() > 0) updated_song.set_year(fetched_song.year());
             if (fetched_song.length_nanosec() > 0) updated_song.set_length_nanosec(fetched_song.length_nanosec());
             if (fetched_song.art_automatic().isValid()) updated_song.set_art_automatic(fetched_song.art_automatic());
-            playlist_item->SetOriginalMetadata(updated_song);
-            app_->playlist_manager()->current()->ItemReload(metadata_queue_entry.persistent_index, false);
+            app_->playlist_manager()->current()->UpdateItemMetadata(metadata_queue_entry.persistent_index.row(), playlist_item, updated_song, false);
           }
         }
         request->deleteLater();

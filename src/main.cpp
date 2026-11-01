@@ -26,7 +26,6 @@
 
 #include <cstdlib>
 #include <ctime>
-#include <memory>
 
 #ifdef Q_OS_UNIX
 #  include <unistd.h>
@@ -43,6 +42,9 @@
 #endif  // Q_OS_WIN32
 
 #include <glib.h>
+
+#include <utility>
+#include <memory>
 
 #include <QObject>
 #include <QApplication>
@@ -132,6 +134,8 @@
 #include "engine/gststartup.h"
 
 using namespace Qt::Literals::StringLiterals;
+using std::as_const;
+using std::make_unique;
 using std::make_shared;
 
 int main(int argc, char *argv[]) {
@@ -265,22 +269,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // Set the permissions on the config file on Unix - it can contain passwords for streaming services, so it's important that other users can't read it.
-  // On Windows these are stored in the registry instead.
-#ifdef Q_OS_UNIX
-  {
-    Settings s;
-    if (QFile::exists(s.fileName())) {
-      if (!QFile::setPermissions(s.fileName(), QFile::ReadOwner | QFile::WriteOwner)) {
-        qLog(Error) << "Could not set permissions for settingsfile" << s.fileName();
-      }
-    }
-    else {
-      qLog(Error) << "Missing settingsfile" << s.fileName();
-    }
-  }
-#endif
-
   // Resources
   Q_INIT_RESOURCE(data);
   Q_INIT_RESOURCE(icons);
@@ -328,23 +316,36 @@ int main(int argc, char *argv[]) {
     languages << QLocale::system().name();
   }
 
-  ScopedPtr<Translations> translations = std::make_unique<Translations>();
+  ScopedPtr<Translations> translations = make_unique<Translations>();
 
-  for (const QString &language : std::as_const(languages)) {
-    if (translations->LoadTranslation(u"qt"_s, QLibraryInfo::path(QLibraryInfo::TranslationsPath), language)) {
+#  if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+  QStringList qt_translation_paths = QLibraryInfo::paths(QLibraryInfo::TranslationsPath);
+#  else
+  QStringList qt_translation_paths = QStringList() << QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#  endif
+  qt_translation_paths.removeDuplicates();
+  for (const QString &language : as_const(languages)) {
+    bool translation_loaded = false;
+    for (const QString &translation_path : as_const(qt_translation_paths)) {
+      if (translations->LoadTranslation(u"qt"_s, translation_path, language)) {
+        translation_loaded = true;
+        break;
+      }
+    }
+    if (translation_loaded) {
       break;
     }
   }
 
-  static const QStringList language_paths = QStringList() << u":/i18n"_s
-                                                          << QStringLiteral(TRANSLATIONS_DIR)
-                                                          << QCoreApplication::applicationDirPath()
-                                                          << QDir::currentPath();
-
-  for (const QString &language : std::as_const(languages)) {
+  QStringList translation_paths = QStringList() << u":/i18n"_s
+                                                << QStringLiteral(TRANSLATIONS_DIR)
+                                                << QCoreApplication::applicationDirPath()
+                                                << QDir::currentPath();
+  translation_paths.removeDuplicates();
+  for (const QString &language : as_const(languages)) {
     bool language_loaded = false;
-    for (const QString &language_path : language_paths) {
-      if (translations->LoadTranslation(u"strawberry"_s, language_path, language)) {
+    for (const QString &translation_path : as_const(translation_paths)) {
+      if (translations->LoadTranslation(u"strawberry"_s, translation_path, language)) {
         language_loaded = true;
         break;
       }
@@ -355,7 +356,7 @@ int main(int argc, char *argv[]) {
   }
 
 #  ifdef HAVE_QTSPARKLE
-  for (const QString &language : std::as_const(languages)) {
+  for (const QString &language : as_const(languages)) {
     if (qtsparkle::LoadTranslations(language)) {
       break;
     }
@@ -381,7 +382,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 #ifdef HAVE_MPRIS2
-  mpris::Mpris2 mpris2(app.player(), app.playlist_manager(), app.current_albumcover_loader());
+  Mpris2 mpris2(app.player(), app.playlist_manager(), app.current_albumcover_loader());
 #endif
 #ifdef HAVE_DISCORD_RPC
   DiscordRichPresence discord_rich_presence(app.player(), app.playlist_manager());
@@ -412,7 +413,8 @@ int main(int argc, char *argv[]) {
 #endif  // Q_OS_MACOS
 
 #ifdef HAVE_MPRIS2
-  QObject::connect(&mpris2, &mpris::Mpris2::RaiseMainWindow, &w, &MainWindow::Raise);
+  QObject::connect(&mpris2, &Mpris2::RaiseMainWindow, &w, &MainWindow::Raise);
+  QObject::connect(&mpris2, &Mpris2::ExitApplication, &w, &MainWindow::Exit);
 #endif
   QObject::connect(&single_app, &KDSingleApplication::messageReceived, &w, QOverload<const QByteArray&>::of(&MainWindow::CommandlineOptionsReceived));
 
